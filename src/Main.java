@@ -1,26 +1,49 @@
-import model.*;
+import DAO_interface.StationDAO;
+import DAO_interface.BlockSectionDAO;
+import model.Station;
+import model.BlockSection;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.List;
-import java.time.LocalTime;
-import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        // 建立車站
-        Station taipei = new Station(1, "台北");
-        Station taichung = new Station(2, "台中");
-        Station kaohsiung = new Station(3, "左營");
+        // 資料庫連線資訊
+        String url = "jdbc:mysql://localhost:3306/TrainSchedulerDB";
+        String user = "root";             // 你的 MySQL 使用者名稱
+        String password = "你的密碼";     // 你的 MySQL 密碼
 
-        // 建立停靠資訊 (StopTime)
-        List<StopTime> stopTimes = new ArrayList<>();
+        try {
+            // 建立連線
+            Connection conn = DriverManager.getConnection(url, user, password);
 
-        stopTimes.add(new StopTime(taipei, null, LocalTime.of(8, 0)));           // 台北發車
-        stopTimes.add(new StopTime(taichung, LocalTime.of(9, 0), LocalTime.of(9, 5))); // 台中到達 9:00，發車 9:05
-        stopTimes.add(new StopTime(kaohsiung, LocalTime.of(10, 30), null));       // 左營到達
+            // 初始化 DAO
+            StationDAO stationDAO = new StationDAO(conn);
+            BlockSectionDAO blockSectionDAO = new BlockSectionDAO(conn);
 
-        // 建立車次 (Train)
-        Train train = new Train(1234, stopTimes);
+            // 載入資料
+            List<Station> stations = stationDAO.getAllStations();
+            List<BlockSection> sections = blockSectionDAO.getAllBlockSections();
 
-        // 列印車次資訊
-        System.out.println(train);
+            // 輸出車站
+            System.out.println("🚉 Stations:");
+            for (Station s : stations) {
+                System.out.println(s.getStationId() + ": " + s.getStationName());
+            }
+
+            // 輸出閉塞區間
+            System.out.println("\n🛤️ Block Sections:");
+            for (BlockSection b : sections) {
+                System.out.println("Section " + b.getSectionId() +
+                        ": " + b.getFromStation() + " -> " + b.getToStation() +
+                        ", Length: " + b.getLengthKm() + " km, Time: " + b.getPassTime() + " min");
+            }
+
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
