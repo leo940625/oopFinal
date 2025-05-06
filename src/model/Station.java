@@ -9,9 +9,6 @@ package model;
  * 使用範圍：
  * - 在 StopTime 類別中標記列車的停靠位置。
  * - 在路線規劃、時刻表、區間計算等功能中，識別特定車站。
- *
- * 後續可擴充：
- * - 加入月台數量、地理座標、車站等級等額外資訊。
  */
 public class Station {
     private int stationId;       // 車站序號

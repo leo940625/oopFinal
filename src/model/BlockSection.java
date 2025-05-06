@@ -4,16 +4,25 @@ public class BlockSection {
     private int sectionId;
     private int fromStation;   // 起點車站的 station_id
     private int toStation;     // 終點車站的 station_id
-    private double lengthKm;   // 區間長度（公里）
+    private double lengthKm;// 區間長度（公里）
+    private int passTime;
 
-    public BlockSection(int sectionId, int fromStation, int toStation, double lengthKm) {
+    public BlockSection(int sectionId, int fromStation, int toStation, double lengthKm,int passTime) {
         this.sectionId = sectionId;
         this.fromStation = fromStation;
         this.toStation = toStation;
         this.lengthKm = lengthKm;
+        this.passTime = passTime;
     }
 
     // Getter 與 Setter
+    public int getPassTime() {
+        return passTime;
+    }
+    public void setPassTime(int passTime) {
+        this.passTime = passTime;
+    }
+
     public int getSectionId() {
         return sectionId;
     }
