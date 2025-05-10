@@ -1,33 +1,45 @@
-import model.*;
-import java.time.LocalTime;
-import java.util.ArrayList;
+import dao.StationDAO;
+import dao.StationDAOImpl;
+import dao.BlockSectionDAO;
+import dao.BlockSectionDAOImpl;
+import model.Station;
+import model.BlockSection;
+
 import java.util.List;
 
 /**
- * 這個小測試會：
- * - 建立幾個 Station（車站）
- * - 建立每個 Station 的 StopTime（到達/發車時間）
- * - 組成一個 Train（車次）
- * - 印出完整時刻表
+ * 主類，用於展示車站和區間段數據的檢索和輸出。
+ * 該類通過 StationDAO 和 BlockSectionDAO 從數據庫中獲取數據，並將結果打印到控制台。
  */
 public class Main {
+
+    /**
+     * 程序的入口點，負責初始化 DAO 對象並顯示所有車站和區間段的信息。
+     *
+     * @param args 命令行參數（本程序未使用）。
+     */
     public static void main(String[] args) {
-        // 建立車站
-        Station taipei = new Station(1, "台北");
-        Station taichung = new Station(2, "台中");
-        Station kaohsiung = new Station(3, "左營");
+        // 初始化 StationDAO 對象，用於訪問車站數據
+        StationDAO stationDAO = new StationDAOImpl();
+        // 初始化 BlockSectionDAO 對象，用於訪問區間段數據
+        BlockSectionDAO blockDAO = new BlockSectionDAOImpl();
 
-        // 建立停靠資訊 (StopTime)
-        List<StopTime> stopTimes = new ArrayList<>();
+        // 打印車站標題
+        System.out.println("車站:");
+        // 獲取所有車站數據
+        List<Station> stations = stationDAO.getAllStations();
+        // 遍歷並打印每個車站的信息
+        for (Station s : stations) {
+            System.out.println(s);
+        }
 
-        stopTimes.add(new StopTime(taipei, null, LocalTime.of(8, 0)));           // 台北發車
-        stopTimes.add(new StopTime(taichung, LocalTime.of(9, 0), LocalTime.of(9, 5))); // 台中到達 9:00，發車 9:05
-        stopTimes.add(new StopTime(kaohsiung, LocalTime.of(10, 30), null));       // 左營到達
-
-        // 建立車次 (Train)
-        Train train = new Train(1234, stopTimes);
-
-        // 列印車次資訊
-        System.out.println(train);
+        // 打印區間段標題
+        System.out.println("\n區間段:");
+        // 獲取所有區間段數據
+        List<BlockSection> blocks = blockDAO.getAllBlockSections();
+        // 遍歷並打印每個區間段的信息
+        for (BlockSection b : blocks) {
+            System.out.println(b);
+        }
     }
 }
