@@ -1,6 +1,6 @@
 # TrainScheduler 火車時刻表排程系統
 
-一個使用 Java 實作的火車時刻表與排程管理系統，支援查詢列車班次、時刻表排序等功能。此專案旨在展示 Java 在物件導向、檔案處理與 GUI 方面的實力，並可作為期末專案、學術作業或個人練習使用。
+一個使用 Java 實作的火車時刻表與排程管理系統，支援查詢列車班次、時刻表排序等功能。此專案旨在展示 Java 在物件導向、檔案處理與 GUI 方面的實力，作為期末專案使用。
 
 ---
 
@@ -22,11 +22,9 @@
 | 技術/工具 | 說明 |
 |------------|----------------|
 | Java | 核心程式語言 |
-| JavaFX | GUI（可選） |
-| OOP | 類別：Train, Stop, Schedule, TicketSystem |
-| Java I/O | 讀寫 CSV / Text 資料 |
+| JavaSwing | GUI|
+| OOP | 類別：Train, StopTime, Station, Blocksection |
 | MySQL | 資料庫 |
-| Collection | 使用 List / Map 管理列車資料 |
 
 ---
 
@@ -103,9 +101,8 @@ java -cp bin Main
 ## 👨‍💻 作者資訊
 
 - 專案作者：謝珷兆、方穆涵、陳澤諒、周羿辰
-- 使用技術：Java, JavaFX, OOP, Thread, File I/O
-- 學術用途：期末專題 / 課堂展示 / 個人練習
+- 使用技術：Java, JavaSwing, OOP, Netbeam, MySQL
+- 學術用途：期末專題
 
 ---
 
-📫 有任何建議或想要參與開發，歡迎聯絡或發 PR 🙌
