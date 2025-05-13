@@ -40,4 +40,22 @@ public class StationDAOImpl implements StationDAO {
 
         return list;
     }
+
+    @Override
+    public Station getStationById(int stationId) {
+        String sql = "SELECT station_id, station_name FROM Station WHERE station_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, stationId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("station_id");
+                String name = rs.getString("station_name");
+                return new Station(id, name);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // 若找不到對應車站則回傳 null
+    }
 }

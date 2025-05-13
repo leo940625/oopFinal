@@ -21,6 +21,7 @@ public class Train {
     public boolean getDirection() {
         return direction;
     }
+
     public void setDirection(boolean direction) {
         this.direction = direction;
     }
@@ -58,8 +59,6 @@ public class Train {
         } else {
             sb.append(" [無停靠站資料]\n");
         }
-
         return sb.toString();
     }
-
 }
