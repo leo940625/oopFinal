@@ -1,10 +1,12 @@
 package dao;
 
+import model.Station;
 import model.StopTime;
+import util.DBConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.*;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StopTimeDAOImpl implements StopTimeDAO {
@@ -36,7 +38,28 @@ public class StopTimeDAOImpl implements StopTimeDAO {
     }
     @Override
     public List<StopTime> getStopTimesByTrain(int trainNumber) {
-        // 可選功能：查詢某列車的所有停靠站
-        return null;
+        List<StopTime> stopTimes = new ArrayList<>();
+
+        String sql = "SELECT station_id, arrival_time, departure_time FROM StopTime WHERE train_number = ? ORDER BY stop_order";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, trainNumber);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int stationId = rs.getInt("station_id");
+                LocalTime arrival = rs.getTime("arrival_time") != null ? rs.getTime("arrival_time").toLocalTime() : null;
+                LocalTime departure = rs.getTime("departure_time") != null ? rs.getTime("departure_time").toLocalTime() : null;
+
+                Station station = new Station(stationId, "未知"); // 你可以查 StationDAO 或暫時給個名稱
+                StopTime stop = new StopTime(station, arrival, departure);
+                stopTimes.add(stop);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return stopTimes;
     }
+
 }

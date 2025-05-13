@@ -47,7 +47,6 @@ public class Train {
         sb.append("Train Number: ").append(trainNumber).append("\n");
         sb.append("Direction: ").append(direction ? "Northbound" : "Southbound").append("\n");
         sb.append("Stop Times:\n");
-
         if (stopTimes != null) {
             for (StopTime st : stopTimes) {
                 sb.append(" - ")
