@@ -12,7 +12,11 @@ public class Train {
         this.stopTimes = stopTimes != null ? stopTimes : new ArrayList<>();
         this.direction = direction;
     }
-
+    public Train(int trainNumber, boolean direction) {
+        this.trainNumber = trainNumber;
+        this.stopTimes = new ArrayList<>();
+        this.direction = direction;
+    }
     // Getter and Setter
     public boolean getDirection() {
         return direction;
@@ -41,7 +45,7 @@ public class Train {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Train Number: ").append(trainNumber).append("\n");
-        sb.append("Direction: ").append(direction ? "Southbound" : "Northbound").append("\n");
+        sb.append("Direction: ").append(direction ? "Northbound" : "Southbound").append("\n");
         sb.append("Stop Times:\n");
 
         if (stopTimes != null) {

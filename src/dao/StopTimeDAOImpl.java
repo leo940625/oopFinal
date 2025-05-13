@@ -34,7 +34,6 @@ public class StopTimeDAOImpl implements StopTimeDAO {
             e.printStackTrace();
         }
     }
-
     @Override
     public List<StopTime> getStopTimesByTrain(int trainNumber) {
         // 可選功能：查詢某列車的所有停靠站
