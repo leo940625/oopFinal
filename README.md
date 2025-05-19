@@ -36,18 +36,17 @@
 │
 │   ├── ui/                               ← 使用者介面主目錄（模組化 GUI）
 │   │   ├── addtrain/                     ← 新增車次模組
-│   │   │   └── AddTrainFrame.java
+│   │   │   ├── AddTrainFrame.java
+│   │   │   └── login/                    ← 登入流程模組（僅供新增車次使用）
+│   │   │       ├── LoginChoiceFrame.java
+│   │   │       └── EmployeeLoginFrame.java
 │   │   │
 │   │   ├── ticketdownload/              ← 票務下載模組
 │   │   │   ├── TicketPreviewFrame.java
 │   │   │   ├── TicketPanel.java
 │   │   │   └── TicketInputFrame.java
 │   │   │
-│   │   ├── login/                       ← 登入流程模組 (新增車次的功能之一)
-│   │   │   ├── LoginChoiceFrame.java
-│   │   │   └── EmployeeLoginFrame.java
-│   │   │
-│   │   ├── searchtrain/                 ← 列車查詢模組（還沒做）
+│   │   ├── searchtrain/                 ← 列車查詢模組（尚未實作）
 │   │   │
 │   │   ├── contact/                     ← 聯絡資訊模組
 │   │   │   └── BannerPanel.java
@@ -84,7 +83,7 @@
 ├── db/                                  ← SQL 建表與初始化資料
 │   └── schema.sql                       ← 建立資料表與預設資料
 │
-├── resources/                           ← UI所需圖片資源
+├── resources/                           ← UI 所需圖片資源（logo、背景圖等）
 │
 └── README.md                            ← 專案說明文件
 ```
