@@ -49,11 +49,11 @@
 │   │   ├── searchtrain/                 ← 列車查詢模組（尚未實作）
 │   │   │
 │   │   ├── contact/                     ← 聯絡資訊模組
-│   │   │   └── BannerPanel.java
 │   │   │
 │   │   ├── HomeFrame.java               ← 主畫面
 │   │   ├── BackgroundPanel.java         ← 共用背景面板
-│   │   └── GradientPanel.java           ← 共用漸層面板
+│   │   ├── GradientPanel.java           ← 共用漸層面板
+│   │   └── BannerPanel.java         ← 封面圖片設計
 │
 │   ├── controller/                      ← 控制邏輯層（MVC 中 C）
 │   │   └── TrainController.java
