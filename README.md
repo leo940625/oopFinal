@@ -32,41 +32,59 @@
 
 ```
 ├── src/
-│   ├── Main.java                   ← 程式主入口
+│   ├── Main.java                         ← 程式主入口
 │
-│   ├── ui/                         ← 使用者介面類別放這裡（如 Swing GUI 視窗）
-│   │   ├── MainFrame.java
-│   │   └── TrainPanel.java
+│   ├── ui/                               ← 使用者介面主目錄（模組化 GUI）
+│   │   ├── addtrain/                     ← 新增車次模組
+│   │   │   ├── AddTrainFrame.java
+│   │   │   └── TicketInputFrame.java
+│   │   │
+│   │   ├── ticketdownload/              ← 票務下載模組
+│   │   │   ├── TicketPreviewFrame.java
+│   │   │   └── TicketPanel.java
+│   │   │
+│   │   ├── login/                       ← 登入流程模組
+│   │   │   ├── LoginChoiceFrame.java
+│   │   │   └── EmployeeLoginFrame.java
+│   │   │
+│   │   ├── contact/                     ← 聯絡資訊模組
+│   │   │   └── BannerPanel.java
+│   │   │
+│   │   ├── HomeFrame.java               ← 主畫面
+│   │   ├── BackgroundPanel.java         ← 共用背景面板
+│   │   └── GradientPanel.java           ← 共用漸層面板
 │
-│   ├── controller/                 ← 控制邏輯層（處理使用者輸入與指令轉發）
+│   ├── controller/                      ← 控制邏輯層（MVC 中 C）
 │   │   └── TrainController.java
 │
-│   ├── model/                      ← 資料與邏輯模型（物件＋演算法）
-│   │   ├── Train.java              ← 車次資訊
-│   │   ├── Stop.java               ← 停靠站資訊
-│   │   ├── Schedule.java           ← 排程邏輯與時間運算
-│   │   └── Ticket.java             ← 車票邏輯（如有訂票功能）
+│   ├── model/                           ← 資料與邏輯模型（MVC 中 M）
+│   │   ├── Train.java                   ← 車次資訊
+│   │   ├── Stop.java                    ← 停靠站資訊
+│   │   ├── Schedule.java                ← 排程邏輯與時間運算
+│   │   └── Ticket.java                  ← 車票邏輯（如有訂票功能）
 │
-│   ├── dao/                        ← 資料存取層（負責讀寫 DB 或檔案）
+│   ├── dao/                             ← 資料存取層（資料庫／檔案操作）
 │   │   ├── TrainDAO.java
 │   │   ├── TrainDAOImpl.java
 │   │   ├── StationDAO.java
-│   │   ├── StationDAOImpl.java
+│   │   └── StationDAOImpl.java
 │
-│   ├── view/                       ← 輸出畫面層（UI 呈現，可為 GUI 或 Console）
-│   │   ├── ConsoleUI.java          ← 命令列版畫面（可作為測試工具）
-│   │   └── GUI.java (optional)     ← Java Swing 介面（如有）
+│   ├── view/                            ← UI 呈現層（文字或圖形介面）
+│   │   ├── ConsoleUI.java               ← 命令列工具（可選）
+│   │   └── GUI.java                     ← Swing GUI 簡化入口（可選）
 │
-│   └── utils/                      ← 工具類別與公用邏輯
-│       └── DBConnection.java       
+│   └── utils/                           ← 工具與公用元件
+│       └── DBConnection.java
 │
-├── data/                           ← 外部靜態資料（如匯入匯出用）
-│   └── trains.csv                  ← 列車初始資料（可選）
+├── data/                                ← 外部靜態資料（如匯入匯出用）
+│   └── trains.csv                       ← 列車初始資料（可選）
 │
-├── db/                             ← SQL 建表與初始化資料
-│   └── schema.sql                  ← 建立資料表與預設資料
+├── db/                                  ← SQL 建表與初始化資料
+│   └── schema.sql                       ← 建立資料表與預設資料
 │
-└── README.md                       ← 專案說明文件
+├── resources/                           ← UI所需圖片資源
+│
+└── README.md                            ← 專案說明文件
 ```
 
 ---
