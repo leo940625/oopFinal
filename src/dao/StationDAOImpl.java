@@ -37,7 +37,6 @@ public class StationDAOImpl implements StationDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return list;
     }
 

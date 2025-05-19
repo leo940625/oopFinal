@@ -39,6 +39,7 @@ public class StopTimeDAOImpl implements StopTimeDAO {
     @Override
     public List<StopTime> getStopTimesByTrain(int trainNumber) {
         List<StopTime> stopTimes = new ArrayList<>();
+        StationDAOImpl sta = new StationDAOImpl();
 
         String sql = "SELECT station_id, arrival_time, departure_time FROM StopTime WHERE train_number = ? ORDER BY stop_order";
 
@@ -51,7 +52,7 @@ public class StopTimeDAOImpl implements StopTimeDAO {
                 LocalTime arrival = rs.getTime("arrival_time") != null ? rs.getTime("arrival_time").toLocalTime() : null;
                 LocalTime departure = rs.getTime("departure_time") != null ? rs.getTime("departure_time").toLocalTime() : null;
 
-                Station station = new Station(stationId, "未知"); // 你可以查 StationDAO 或暫時給個名稱
+                Station station = new Station(stationId, sta.getStationById(stationId).getStationName()); // 你可以查 StationDAO 或暫時給個名稱
                 StopTime stop = new StopTime(station, arrival, departure);
                 stopTimes.add(stop);
             }
