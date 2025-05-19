@@ -1,17 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
-package com.mycompany.trainscheduler;
+package ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 /**
  * 首頁畫面 含四個選項
  * @author meredithfang
  */
-class HomeFrame extends JFrame {
+public class HomeFrame extends JFrame {
     public HomeFrame() {
         setTitle("Train Scheduler - CSLD Railway");
         setSize(600, 600);

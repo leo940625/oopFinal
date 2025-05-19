@@ -1,12 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
-package com.mycompany.trainscheduler;
-
-import ui.*;
-
+import ui.HomeFrame;
 import javax.swing.SwingUtilities;
+
+
 /**
  * 負責叫出首頁 HomeFrame
  */

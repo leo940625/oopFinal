@@ -1,5 +1,5 @@
 //package MovieBooking.help;
-package com.mycompany.trainscheduler;
+package ui.ticketdownload;
 
 import javax.swing.*;
 import java.awt.*;
