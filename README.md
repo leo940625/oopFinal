@@ -36,12 +36,12 @@
 │
 │   ├── ui/                               ← 使用者介面主目錄（模組化 GUI）
 │   │   ├── addtrain/                     ← 新增車次模組
-│   │   │   ├── AddTrainFrame.java
-│   │   │   └── TicketInputFrame.java
+│   │   │   └── AddTrainFrame.java
 │   │   │
 │   │   ├── ticketdownload/              ← 票務下載模組
 │   │   │   ├── TicketPreviewFrame.java
-│   │   │   └── TicketPanel.java
+│   │   │   ├── TicketPanel.java
+│   │   │   └── TicketInputFrame.java
 │   │   │
 │   │   ├── login/                       ← 登入流程模組
 │   │   │   ├── LoginChoiceFrame.java
