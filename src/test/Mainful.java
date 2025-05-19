@@ -1,3 +1,5 @@
+package test;
+
 import dao.*;
 import model.*;
 import util.*;
@@ -6,7 +8,8 @@ import java.util.*;
 import java.sql.Connection;
 
 public class Mainful {
-    public static void main(String[] args) {
+
+    public static void test() {
         try {
             // 建立資料庫連線
             Connection conn = DBConnection.getConnection();
