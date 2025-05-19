@@ -43,9 +43,11 @@
 │   │   │   ├── TicketPanel.java
 │   │   │   └── TicketInputFrame.java
 │   │   │
-│   │   ├── login/                       ← 登入流程模組
+│   │   ├── login/                       ← 登入流程模組 (新增車次的功能之一)
 │   │   │   ├── LoginChoiceFrame.java
 │   │   │   └── EmployeeLoginFrame.java
+│   │   │
+│   │   ├── searchtrain/                 ← 列車查詢模組（還沒做）
 │   │   │
 │   │   ├── contact/                     ← 聯絡資訊模組
 │   │   │   └── BannerPanel.java
