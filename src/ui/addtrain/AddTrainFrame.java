@@ -3,13 +3,13 @@ package ui.addtrain;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalTime;
-import ui.addtrain.login.LoginChoiceFrame;
+import ui.*;
 
 /**
  * 新增班次
  * @author meredithfang
  */
-class AddTrainFrame extends JFrame {
+public class AddTrainFrame extends JFrame {
     private JComboBox<String> directionBox;
     private JTextField hourField;
     private JTextField minuteField;

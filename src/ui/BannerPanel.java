@@ -7,7 +7,7 @@ import java.awt.*;
  * 首頁上方banner
  * @author meredithfang
  */
-class BannerPanel extends JPanel {
+public class BannerPanel extends JPanel {
     private Image bannerImage;
     private final String bannerPath = "/Users/meredithfang/NetBeansProjects/resources/train.jpg";
 

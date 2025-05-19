@@ -7,7 +7,7 @@ import java.awt.*;
  * LoginChoiceFrame背景
  * @author meredithfang
  */
-class BackgroundPanel extends JPanel {
+public class BackgroundPanel extends JPanel {
     private Image backgroundImage;
     private final String backgroundPath = "/Users/meredithfang/NetBeansProjects/resources/LoginBackground.jpg"; // ★ 這裡放你的背景圖路徑！
 

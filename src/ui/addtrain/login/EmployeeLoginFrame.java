@@ -2,12 +2,13 @@ package ui.addtrain.login;
 
 import javax.swing.*;
 import java.awt.*;
+import ui.addtrain.AddTrainFrame;
 
 /**
  *
  * @author meredithfang
  */
-class EmployeeLoginFrame extends JFrame {
+public class EmployeeLoginFrame extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
 

@@ -11,7 +11,7 @@ import java.awt.*;
  * 新增班次時要先確認是否是員工
  * @author meredithfang
  */
-class LoginChoiceFrame extends JFrame {
+public class LoginChoiceFrame extends JFrame {
     public LoginChoiceFrame() {
         setTitle("登入選擇");
         setSize(600, 600);
