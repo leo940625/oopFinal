@@ -8,7 +8,6 @@ import java.util.Arrays;
 import ui.GradientPanel;
 /**
  * 輸入車票資訊
- * @author meredithfang
  */
 public class TicketInputFrame extends JFrame {
     private JTextField trainNumberField;
@@ -109,7 +108,7 @@ public class TicketInputFrame extends JFrame {
             return;
         }
 
-        // 假資料，這裡可以之後連後端
+        // TODO:假資料，連後端
         String departureTime = "08:00";
         String arrivalTime = "10:30";
 
@@ -140,6 +139,7 @@ public class TicketInputFrame extends JFrame {
         return button;
     }
 
+    // TODO: 跟資料庫確認輸入的火車班次是不是確實有停輸入的兩個車站
     private void initializeTrainStops() {
         trainStops.put("1234", Arrays.asList("板橋", "台北", "桃園", "新竹", "台中", "嘉義", "台南", "左營"));
         trainStops.put("5678", Arrays.asList("台北", "南港", "桃園", "新竹", "苗栗", "台中", "彰化"));

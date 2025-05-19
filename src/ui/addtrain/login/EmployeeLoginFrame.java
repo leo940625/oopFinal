@@ -6,8 +6,7 @@ import ui.addtrain.AddTrainFrame;
 import ui.BackgroundPanel;
 
 /**
- *
- * @author meredithfang
+ * 登入畫面（輸入員工帳號密碼）
  */
 public class EmployeeLoginFrame extends JFrame {
     private JTextField usernameField;
@@ -70,7 +69,8 @@ public class EmployeeLoginFrame extends JFrame {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        // === 直接寫死帳密在程式裡 ===
+        // 直接寫死帳密在程式裡 TODO:還是要創員工資料庫？
+        // "csld", "9@y" TODO:考慮換帳號密碼
         if (username.equals("admin") && password.equals("1234")) {
             new AddTrainFrame(); // 登入成功後進入新增車次
             dispose();

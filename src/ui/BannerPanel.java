@@ -5,7 +5,6 @@ import java.awt.*;
 
 /**
  * 首頁上方banner
- * @author meredithfang
  */
 public class BannerPanel extends JPanel {
     private Image bannerImage;

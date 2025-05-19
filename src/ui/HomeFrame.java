@@ -7,7 +7,6 @@ import ui.addtrain.AddTrainFrame;
 import ui.ticketdownload.*;
 /**
  * 首頁畫面 含四個選項
- * @author meredithfang
  */
 public class HomeFrame extends JFrame {
     public HomeFrame() {

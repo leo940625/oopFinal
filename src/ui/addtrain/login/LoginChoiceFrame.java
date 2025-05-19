@@ -10,7 +10,6 @@ import ui.*;
 
 /**
  * 新增班次時要先確認是否是員工
- * @author meredithfang
  */
 public class LoginChoiceFrame extends JFrame {
     public LoginChoiceFrame() {

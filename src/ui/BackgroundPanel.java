@@ -5,7 +5,6 @@ import java.awt.*;
 
 /**
  * LoginChoiceFrame背景
- * @author meredithfang
  */
 public class BackgroundPanel extends JPanel {
     private Image backgroundImage;

@@ -7,7 +7,6 @@ import ui.HomeFrame;
 
 /**
  * 顯示車票
- * @author meredithfang
  */
 public class TicketPreviewFrame extends JFrame {
     private String departureStation;

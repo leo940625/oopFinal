@@ -5,7 +5,6 @@ import java.awt.*;
 
 /**
  * 粉紅漸層背景
- * @author meredithfang
  */
 public class GradientPanel extends JPanel {
     @Override
