@@ -5,12 +5,12 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
-
+import ui.GradientPanel;
 /**
  * 輸入車票資訊
  * @author meredithfang
  */
-class TicketInputFrame extends JFrame {
+public class TicketInputFrame extends JFrame {
     private JTextField trainNumberField;
     private JComboBox<String> departureBox;
     private JComboBox<String> arrivalBox;

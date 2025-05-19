@@ -116,8 +116,8 @@ public class AddTrainFrame extends JFrame {
             int hour = Integer.parseInt(hourField.getText());
             int minute = Integer.parseInt(minuteField.getText());
             LocalTime departure = LocalTime.of(hour, minute);
-
             String direction = (String) directionBox.getSelectedItem();
+            //幫我把direction 取到的值改成boolean 北上為true
 
             int selectedStations = 0;
             StringBuilder stations = new StringBuilder();

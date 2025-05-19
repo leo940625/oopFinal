@@ -3,7 +3,8 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
+import ui.addtrain.AddTrainFrame;
+import ui.ticketdownload.*;
 /**
  * 首頁畫面 含四個選項
  * @author meredithfang

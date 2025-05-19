@@ -3,6 +3,7 @@ package ui.addtrain.login;
 import javax.swing.*;
 import java.awt.*;
 import ui.addtrain.AddTrainFrame;
+import ui.BackgroundPanel;
 
 /**
  *

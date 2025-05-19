@@ -3,12 +3,13 @@ package ui.ticketdownload;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
+import ui.HomeFrame;
 
 /**
  * 顯示車票
  * @author meredithfang
  */
-class TicketPreviewFrame extends JFrame {
+public class TicketPreviewFrame extends JFrame {
     private String departureStation;
     private String arrivalStation;
     private String departureTime;

@@ -6,6 +6,7 @@ package ui.addtrain.login;
 
 import javax.swing.*;
 import java.awt.*;
+import ui.*;
 
 /**
  * 新增班次時要先確認是否是員工
