@@ -198,6 +198,7 @@ public class AddTrainFrame extends JFrame {
             //TODO:TrainID是車次但是是string,isNorthbound是方向(boolean),intTraindId(int),departure是出發時間(Localtime)
             String trainId = trainIdField.getText().trim();
             List<Train> trains = trainDAO.getAllTrains();
+
             if (!trainId.matches("\\d{4}")) {
                 JOptionPane.showMessageDialog(this,
                         "請輸入 4 位數字作為車次編號！",
@@ -205,6 +206,7 @@ public class AddTrainFrame extends JFrame {
                 return;
             }
             int intTraindId = Integer.valueOf(trainId);
+
             if (isTrainIdDuplicate(intTraindId,trains)) {
                 JOptionPane.showMessageDialog(this,
                         "該車次編號已存在，請重新輸入！",
@@ -227,9 +229,11 @@ public class AddTrainFrame extends JFrame {
             }
 
             //TODO:從這邊開始處理Addtrain
+            /*
             Train train = new Train(intTraindId, stops, isNorthbound);
             train.calculateSchedule(sectionDAO,stationDAO.getAllStations());
             trainDAO.addTrain(train);
+             */
 
             int choice = JOptionPane.showOptionDialog(this,
                     "新增成功！請選擇接下來的操作：",
