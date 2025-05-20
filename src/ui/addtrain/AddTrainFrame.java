@@ -192,9 +192,29 @@ public class AddTrainFrame extends JFrame {
             StationDAO stationDAO = new StationDAOImpl();
             TrainDAO trainDAO = new TrainDAOImpl(conn);
 
-            int hour = Integer.parseInt(hourField.getText());
-            int minute = Integer.parseInt(minuteField.getText());
+            // 驗證時間格式與範圍
+            String hourText = hourField.getText().trim();
+            String minuteText = minuteField.getText().trim();
+
+            if (!hourText.matches("\\d{1,2}") || !minuteText.matches("\\d{1,2}")) {
+                JOptionPane.showMessageDialog(this,
+                        "請輸入正確格式的時與分（兩欄皆須為數字）",
+                        "錯誤", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int hour = Integer.parseInt(hourText);
+            int minute = Integer.parseInt(minuteText);
+
+            if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+                JOptionPane.showMessageDialog(this,
+                        "小時請輸入 0~23，分鐘請輸入 0~59",
+                        "錯誤", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             LocalTime departure = LocalTime.of(hour, minute);
+
             String direction = (String) directionBox.getSelectedItem();
             boolean isNorthbound = "北上".equals(direction);
             // TODO: TrainID是車次但是是string,isNorthbound是方向(boolean),intTrainId(int),departure是出發時間(Localtime)
@@ -253,10 +273,12 @@ public class AddTrainFrame extends JFrame {
             }
 
         } catch (Exception ex) {
+            ex.printStackTrace(); // 可以幫助你除錯，看到真實錯誤原因
             JOptionPane.showMessageDialog(this,
-                    "請正確輸入小時和分鐘（0-23 小時, 0-59 分鐘）",
+                    "發生未知錯誤，請稍後再試。",
                     "錯誤", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
     private boolean isTrainIdDuplicate(int id, List<Train> trains) {
