@@ -17,11 +17,12 @@ public class BlockSectionDAOImpl implements BlockSectionDAO {
     public BlockSectionDAOImpl(Connection conn) {
         this.conn = conn;
     }
+
     /**
      * 從數據庫中檢索所有區間段。
      *
      * @return 包含數據庫中所有區間段的 BlockSection 對象列表。
-     *         如果未找到區間段或發生錯誤，則返回空列表。
+     * 如果未找到區間段或發生錯誤，則返回空列表。
      */
     @Override
     public List<BlockSection> getAllBlockSections() {
@@ -48,6 +49,7 @@ public class BlockSectionDAOImpl implements BlockSectionDAO {
 
         return list;
     }
+
     @Override
     public int getPassTime(int fromStationId, int toStationId) {
         String sql = "SELECT pass_time_min FROM BlockSection WHERE from_station = ? AND to_station = ?";

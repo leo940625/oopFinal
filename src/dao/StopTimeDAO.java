@@ -1,5 +1,7 @@
 package dao;
+
 import model.StopTime;
+
 import java.util.List;
 
 public interface StopTimeDAO {

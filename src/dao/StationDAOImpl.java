@@ -16,7 +16,7 @@ public class StationDAOImpl implements StationDAO {
      * 從數據庫中檢索所有車站。
      *
      * @return 包含數據庫中所有車站的 Station 對象列表。
-     *         如果未找到車站或發生錯誤，則返回空列表。
+     * 如果未找到車站或發生錯誤，則返回空列表。
      */
     @Override
     public List<Station> getAllStations() {

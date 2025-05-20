@@ -1,12 +1,19 @@
 package dao;
 
+import model.StopTime;
+import model.Train;
 import util.DBConnection;
-import java.util.*;
-import model.*;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrainDAOImpl implements TrainDAO {
     private Connection conn;
+
     public TrainDAOImpl(Connection conn) {
         this.conn = conn;
     }
@@ -30,7 +37,7 @@ public class TrainDAOImpl implements TrainDAO {
             for (StopTime st : train.getStopTimes()) {
                 stable.add(st);
             }
-            stopTimeDAO.addStopTimes(train.getTrainNumber(),stable);
+            stopTimeDAO.addStopTimes(train.getTrainNumber(), stable);
             conn.commit(); // 提交交易
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,9 +72,18 @@ public class TrainDAOImpl implements TrainDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try { if (rs != null) rs.close(); } catch (Exception ignored) {}
-            try { if (stmt != null) stmt.close(); } catch (Exception ignored) {}
-            try { if (conn != null) conn.close(); } catch (Exception ignored) {}
+            try {
+                if (rs != null) rs.close();
+            } catch (Exception ignored) {
+            }
+            try {
+                if (stmt != null) stmt.close();
+            } catch (Exception ignored) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception ignored) {
+            }
         }
         return train;
     }

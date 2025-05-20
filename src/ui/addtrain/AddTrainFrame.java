@@ -1,16 +1,17 @@
 package ui.addtrain;
 
+import dao.*;
+import model.Train;
+import ui.GradientPanel;
+import ui.HomeFrame;
+import util.DBConnection;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import dao.*;
-import model.Train;
-import ui.*;
-import util.DBConnection;
 
 
 /**
@@ -148,7 +149,7 @@ public class AddTrainFrame extends JFrame {
 
         // TODO: 可以引入資料庫就不用寫死車站
         String[] stationNames = {"南港", "台北", "板橋", "桃園", "新竹", "苗栗",
-                                 "台中", "彰化", "雲林", "嘉義", "台南", "左營"};
+                "台中", "彰化", "雲林", "嘉義", "台南", "左營"};
         JPanel stationPanel = new JPanel(new GridLayout(3, 4, 15, 5));
         stationPanel.setOpaque(false);
         stationChecks = new JCheckBox[stationNames.length];
@@ -183,8 +184,9 @@ public class AddTrainFrame extends JFrame {
         setContentPane(contentPane);
         setVisible(true);
     }
+
     private void handleSubmit() {
-        try (Connection conn = DBConnection.getConnection()){
+        try (Connection conn = DBConnection.getConnection()) {
 
             BlockSectionDAO sectionDAO = new BlockSectionDAOImpl(conn);
             StationDAO stationDAO = new StationDAOImpl();
@@ -207,7 +209,7 @@ public class AddTrainFrame extends JFrame {
             }
             int intTraindId = Integer.valueOf(trainId);
 
-            if (isTrainIdDuplicate(intTraindId,trains)) {
+            if (isTrainIdDuplicate(intTraindId, trains)) {
                 JOptionPane.showMessageDialog(this,
                         "該車次編號已存在，請重新輸入！",
                         "錯誤", JOptionPane.ERROR_MESSAGE);
@@ -259,7 +261,7 @@ public class AddTrainFrame extends JFrame {
         }
     }
 
-    private boolean isTrainIdDuplicate(int id,List<Train> trains) {
+    private boolean isTrainIdDuplicate(int id, List<Train> trains) {
         // TODO: 這邊要連接你的資料庫進行查詢，檢查該車次是否已存在
         List<Integer> trainIds = new ArrayList<>();
         for (Train train : trains) {
@@ -288,6 +290,7 @@ public class AddTrainFrame extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(255, 105, 180));
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(255, 182, 193));
             }

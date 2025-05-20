@@ -1,5 +1,5 @@
 package dao;
-import model.StopTime;
+
 import model.Train;
 
 import java.util.List;

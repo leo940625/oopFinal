@@ -1,4 +1,5 @@
 package model;
+
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -9,17 +10,20 @@ public class Train {
     private int trainNumber;
     private List<StopTime> stopTimes;// 停靠站及到發時刻
     private boolean direction;
+
     // Constructor
     public Train(int trainNumber, List<StopTime> stopTimes, boolean direction) {
         this.trainNumber = trainNumber;
         this.stopTimes = stopTimes != null ? stopTimes : new ArrayList<>();
         this.direction = direction;
     }
+
     public Train(int trainNumber, boolean direction) {
         this.trainNumber = trainNumber;
         this.stopTimes = new ArrayList<>();
         this.direction = direction;
     }
+
     // Getter and Setter
     public boolean getDirection() {
         return direction;
