@@ -2,8 +2,16 @@ package ui.addtrain;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.*;
+import model.Train;
 import ui.*;
+import util.DBConnection;
+
 
 /**
  * 新增班次
@@ -176,7 +184,12 @@ public class AddTrainFrame extends JFrame {
         setVisible(true);
     }
     private void handleSubmit() {
-        try {
+        try (Connection conn = DBConnection.getConnection()){
+
+            BlockSectionDAO sectionDAO = new BlockSectionDAOImpl(conn);
+            StationDAO stationDAO = new StationDAOImpl();
+            TrainDAO trainDAO = new TrainDAOImpl(conn);
+
             int hour = Integer.parseInt(hourField.getText());
             int minute = Integer.parseInt(minuteField.getText());
             LocalTime departure = LocalTime.of(hour, minute);
@@ -184,6 +197,7 @@ public class AddTrainFrame extends JFrame {
             boolean isNorthbound = "北上".equals(direction);
             //TODO:TrainID是車次但是是string,isNorthbound是方向(boolean),intTraindId(int),departure是出發時間(Localtime)
             String trainId = trainIdField.getText().trim();
+            List<Train> trains = trainDAO.getAllTrains();
             if (!trainId.matches("\\d{4}")) {
                 JOptionPane.showMessageDialog(this,
                         "請輸入 4 位數字作為車次編號！",
@@ -191,14 +205,12 @@ public class AddTrainFrame extends JFrame {
                 return;
             }
             int intTraindId = Integer.valueOf(trainId);
-            if (isTrainIdDuplicate(trainId)) {
+            if (isTrainIdDuplicate(intTraindId,trains)) {
                 JOptionPane.showMessageDialog(this,
                         "該車次編號已存在，請重新輸入！",
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-
             int selectedStations = 0;
             StringBuilder stations = new StringBuilder();
             for (JCheckBox cb : stationChecks) {
@@ -207,13 +219,17 @@ public class AddTrainFrame extends JFrame {
                     selectedStations++;
                 }
             }
-
             if (selectedStations < 2) {
                 JOptionPane.showMessageDialog(this,
                         "請至少選擇兩個停靠車站！",
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
+            //TODO:從這邊開始處理Addtrain
+            Train train = new Train(intTraindId, stops, isNorthbound);
+            train.calculateSchedule(sectionDAO,stationDAO.getAllStations());
+            trainDAO.addTrain(train);
 
             int choice = JOptionPane.showOptionDialog(this,
                     "新增成功！請選擇接下來的操作：",
@@ -239,12 +255,16 @@ public class AddTrainFrame extends JFrame {
         }
     }
 
-    private boolean isTrainIdDuplicate(String id) {
+    private boolean isTrainIdDuplicate(int id,List<Train> trains) {
         // TODO: 這邊要連接你的資料庫進行查詢，檢查該車次是否已存在
-        // 這裡暫時用假資料模擬：
-        String[] existingIds = {"1234", "5678", "9999"};
-        for (String s : existingIds) {
-            if (s.equals(id)) return true;
+        List<Integer> trainIds = new ArrayList<>();
+        for (Train train : trains) {
+            trainIds.add(train.getTrainNumber());
+        }
+        for (Integer trainId : trainIds) {
+            if (id == trainId) {
+                return true;
+            }
         }
         return false;
     }
