@@ -198,6 +198,7 @@ public class AddTrainFrame extends JFrame {
             String direction = (String) directionBox.getSelectedItem();
             boolean isNorthbound = "北上".equals(direction);
             //TODO:TrainID是車次但是是string,isNorthbound是方向(boolean),intTraindId(int),departure是出發時間(Localtime)
+            //stoptime不需照順序 時間可以全null
             String trainId = trainIdField.getText().trim();
             List<Train> trains = trainDAO.getAllTrains();
 
