@@ -2,19 +2,27 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 /**
  * LoginChoiceFrame背景
+ * 還沒帶進去不知道有沒有成功
  */
 public class BackgroundPanel extends JPanel {
     private Image backgroundImage;
-    private final String backgroundPath = "/Users/meredithfang/NetBeansProjects/resources/LoginBackground.jpg"; // ★ 這裡放你的背景圖路徑！
+    private final String backgroundPath = "/resources/LoginBackground.jpg";
 
     public BackgroundPanel() {
         try {
-            backgroundImage = new ImageIcon(backgroundPath).getImage();
+            URL imageUrl = getClass().getResource(backgroundPath);
+            if (imageUrl != null) {
+                backgroundImage = new ImageIcon(imageUrl).getImage();
+            } else {
+                System.out.println("找不到背景圖片：" + backgroundPath);
+                backgroundImage = null;
+            }
         } catch (Exception e) {
-            System.out.println("找不到背景圖片，使用預設。");
+            System.out.println("載入背景圖片時發生錯誤：" + e.getMessage());
             backgroundImage = null;
         }
     }
@@ -27,3 +35,4 @@ public class BackgroundPanel extends JPanel {
         }
     }
 }
+
