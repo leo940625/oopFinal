@@ -12,7 +12,11 @@ import java.util.List;
  * 此類提供了與數據庫中 BlockSection 表交互的方法。
  */
 public class BlockSectionDAOImpl implements BlockSectionDAO {
+    private Connection conn;
 
+    public BlockSectionDAOImpl(Connection conn) {
+        this.conn = conn;
+    }
     /**
      * 從數據庫中檢索所有區間段。
      *
@@ -43,5 +47,20 @@ public class BlockSectionDAOImpl implements BlockSectionDAO {
         }
 
         return list;
+    }
+    @Override
+    public int getPassTime(int fromStationId, int toStationId) {
+        String sql = "SELECT pass_time_min FROM BlockSection WHERE from_station = ? AND to_station = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, fromStationId);
+            stmt.setInt(2, toStationId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("pass_time_min");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new IllegalArgumentException("查無對應區間資料: " + fromStationId + " -> " + toStationId);
     }
 }
