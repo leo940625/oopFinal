@@ -147,7 +147,7 @@ public class AddTrainFrame extends JFrame {
         stationOuterPanel.setOpaque(false);
 
         // TODO: 可以引入資料庫就不用寫死車站
-        String[] stationNames = {"板橋", "台北", "南港", "桃園", "新竹", "苗栗",
+        String[] stationNames = {"南港", "台北", "板橋", "桃園", "新竹", "苗栗",
                                  "台中", "彰化", "雲林", "嘉義", "台南", "左營"};
         JPanel stationPanel = new JPanel(new GridLayout(3, 4, 15, 5));
         stationPanel.setOpaque(false);
