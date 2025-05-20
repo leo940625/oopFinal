@@ -76,15 +76,20 @@ public class Train {
      * @param blockSectionDAO BlockSection 資料來源
      * @param fullRoute       全路線依照方向排序的所有站點清單（ex: 台灣高鐵南下）
      */
-    public void calculateSchedule(BlockSectionDAO blockSectionDAO, List<Station> fullRoute) {
+    public void calculateSchedule(BlockSectionDAO blockSectionDAO, List<Station> fullRoute,LocalTime time) {
         if (stopTimes == null || stopTimes.size() < 2) return;
-
+        if (this.direction) {
+            stopTimes.sort(Comparator.comparingInt((StopTime st) -> st.getStation().getStationId()).reversed());
+        }else{
+            stopTimes.sort(Comparator.comparingInt(st -> st.getStation().getStationId()));
+        }
+        stopTimes.get(0).setDepartureTime(time);
         // 轉成 Map 方便快速查是否有停靠
         Map<Integer, StopTime> stopTimeMap = stopTimes.stream()
                 .collect(Collectors.toMap(st -> st.getStation().getStationId(), st -> st));
 
         // 根據方向排序路線（避免反向時錯位）
-        if (!direction) {
+        if (direction) {
             Collections.reverse(fullRoute);
         }
         LocalTime currentTime = stopTimeMap.get(fullRoute.get(0).getStationId()).getDepartureTime();

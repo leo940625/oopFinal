@@ -54,15 +54,25 @@ public class BlockSectionDAOImpl implements BlockSectionDAO {
     public int getPassTime(int fromStationId, int toStationId) {
         String sql = "SELECT pass_time_min FROM BlockSection WHERE from_station = ? AND to_station = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // 先查詢正向資料
             stmt.setInt(1, fromStationId);
             stmt.setInt(2, toStationId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt("pass_time_min");
             }
+
+            // 查不到就查反向（支援北上列車）
+            stmt.setInt(1, toStationId);
+            stmt.setInt(2, fromStationId);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("pass_time_min");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        throw new IllegalArgumentException("查無對應區間資料: " + fromStationId + " -> " + toStationId);
+        throw new IllegalArgumentException("查無對應區間資料: " + fromStationId + " <-> " + toStationId);
     }
 }

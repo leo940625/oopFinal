@@ -19,17 +19,17 @@ public class Main {
 
             // 建立停靠站列表（只有站名與 ID，時間先留空）
             List<StopTime> stops = new ArrayList<>();
-            stops.add(new StopTime(new Station(1, "南港"), null, LocalTime.of(8, 0))); // 起點站出發時間已知
-            stops.add(new StopTime(stationDAO.getStationById(2), null, null));
-            stops.add(new StopTime(stationDAO.getStationById(3), null, null));
+            stops.add(new StopTime(stationDAO.getStationById(12), null,null )); // 起點站出發時間已知
             stops.add(new StopTime(stationDAO.getStationById(7), null, null));
-            stops.add(new StopTime(stationDAO.getStationById(12), null, null));
+            stops.add(new StopTime(stationDAO.getStationById(8), null, null));
+            stops.add(new StopTime(stationDAO.getStationById(2), null, null));
+            stops.add(new StopTime(stationDAO.getStationById(1), null,null));
 
             // 建立列車物件（trainNumber=1001, direction=true）
-            Train train = new Train(1001, stops, true);
+            Train train = new Train(1001, stops, false);
 
             // 自動計算所有時刻表（使用資料庫資料）
-            train.calculateSchedule(sectionDAO,stationDAO.getAllStations());
+            train.calculateSchedule(sectionDAO,stationDAO.getAllStations(),LocalTime.of(8, 0));
 
             // 印出列車時刻資訊
             System.out.println(train);
