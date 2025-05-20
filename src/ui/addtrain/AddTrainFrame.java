@@ -175,7 +175,6 @@ public class AddTrainFrame extends JFrame {
         setContentPane(contentPane);
         setVisible(true);
     }
-
     private void handleSubmit() {
         try {
             int hour = Integer.parseInt(hourField.getText());
@@ -183,9 +182,7 @@ public class AddTrainFrame extends JFrame {
             LocalTime departure = LocalTime.of(hour, minute);
             String direction = (String) directionBox.getSelectedItem();
             boolean isNorthbound = "北上".equals(direction);
-            //幫我把direction 取到的值改成boolean 北上為true
-            //換一個變數可以咪
-
+            //TODO:TrainID是車次但是是string,isNorthbound是方向(boolean),intTraindId(int),departure是出發時間(Localtime)
             String trainId = trainIdField.getText().trim();
             if (!trainId.matches("\\d{4}")) {
                 JOptionPane.showMessageDialog(this,
@@ -193,6 +190,7 @@ public class AddTrainFrame extends JFrame {
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            int intTraindId = Integer.valueOf(trainId);
             if (isTrainIdDuplicate(trainId)) {
                 JOptionPane.showMessageDialog(this,
                         "該車次編號已存在，請重新輸入！",
