@@ -197,7 +197,8 @@ public class AddTrainFrame extends JFrame {
             LocalTime departure = LocalTime.of(hour, minute);
             String direction = (String) directionBox.getSelectedItem();
             boolean isNorthbound = "北上".equals(direction);
-            //TODO:TrainID是車次但是是string,isNorthbound是方向(boolean),intTraindId(int),departure是出發時間(Localtime)
+            // TODO: TrainID是車次但是是string,isNorthbound是方向(boolean),intTrainId(int),departure是出發時間(Localtime)
+            // TODO: List<String> selectedStations是存勾選車站的字串清單
             //stoptime不需照順序 時間可以全null
             String trainId = trainIdField.getText().trim();
             List<Train> trains = trainDAO.getAllTrains();
@@ -208,23 +209,19 @@ public class AddTrainFrame extends JFrame {
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            int intTraindId = Integer.valueOf(trainId);
+            int intTrainId = Integer.valueOf(trainId); // 車次換成int
 
-            if (isTrainIdDuplicate(intTraindId, trains)) {
+            if (isTrainIdDuplicate(intTrainId, trains)) {
                 JOptionPane.showMessageDialog(this,
                         "該車次編號已存在，請重新輸入！",
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            int selectedStations = 0;
-            StringBuilder stations = new StringBuilder();
-            for (JCheckBox cb : stationChecks) {
-                if (cb.isSelected()) {
-                    stations.append(cb.getText()).append(" ");
-                    selectedStations++;
-                }
-            }
-            if (selectedStations < 2) {
+
+            // 選擇的車站存成一個list
+            // TODO: List<String> selectedStations是存勾選車站的字串清單
+            List<String> selectedStations = getSelectedStations();
+            if (selectedStations.size() < 2) {
                 JOptionPane.showMessageDialog(this,
                         "請至少選擇兩個停靠車站！",
                         "錯誤", JOptionPane.ERROR_MESSAGE);
@@ -233,7 +230,7 @@ public class AddTrainFrame extends JFrame {
 
             //TODO:從這邊開始處理Addtrain
             /*
-            Train train = new Train(intTraindId, stops, isNorthbound);
+            Train train = new Train(intTrainId, stops, isNorthbound);
             train.calculateSchedule(sectionDAO,stationDAO.getAllStations());
             trainDAO.addTrain(train);
              */
@@ -299,4 +296,18 @@ public class AddTrainFrame extends JFrame {
 
         return button;
     }
+    /**
+     * 取得使用者勾選的停靠車站清單。
+     * @return 包含所有被選取之車站名稱的字串清單。
+     */
+    private List<String> getSelectedStations() {
+        List<String> selected = new ArrayList<>();
+        for (JCheckBox cb : stationChecks) {
+            if (cb.isSelected()) {
+                selected.add(cb.getText());
+            }
+        }
+        return selected;
+    }
+
 }

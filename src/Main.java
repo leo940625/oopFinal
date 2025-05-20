@@ -9,8 +9,9 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        //SwingUtilities.invokeLater(() -> new HomeFrame());
+        SwingUtilities.invokeLater(() -> new HomeFrame());
 
+        /*
 
         try (Connection conn = DBConnection.getConnection()) {
             // 建立 BlockSectionDAO 以查詢通過時間
@@ -36,6 +37,6 @@ public class Main {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
