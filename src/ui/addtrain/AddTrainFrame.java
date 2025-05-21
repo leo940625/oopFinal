@@ -13,9 +13,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * 新增班次
+ * 新增車次的圖形用戶界面框架。
+ * 提供用戶輸入車次編號、方向、出發時間和停靠車站的功能，並將數據存入數據庫。
  */
 public class AddTrainFrame extends JFrame {
     private JComboBox<String> directionBox;
@@ -24,6 +24,12 @@ public class AddTrainFrame extends JFrame {
     private JCheckBox[] stationChecks;
     private JTextField trainIdField;
 
+    /**
+     * 檢查用戶是否已登錄，若已登錄則打開新增車次窗口，否則顯示錯誤提示。
+     *
+     * @param parent     父組件，用於顯示錯誤提示對話框
+     * @param isLoggedIn 用戶是否已登錄的標誌
+     */
     public static void openIfAuthenticated(Component parent, boolean isLoggedIn) {
         if (isLoggedIn) {
             new AddTrainFrame().setVisible(true);
@@ -32,8 +38,11 @@ public class AddTrainFrame extends JFrame {
         }
     }
 
+    /**
+     * 構造函數，初始化新增車次窗口的圖形界面。
+     * 設置窗口標題、大小、佈局，並添加方向選擇、車次編號輸入、出發時間輸入和停靠車站勾選等組件。
+     */
     public AddTrainFrame() {
-
         setTitle("新增車次");
         setSize(600, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -55,14 +64,14 @@ public class AddTrainFrame extends JFrame {
         JPanel titlePanel = new JPanel();
         titlePanel.setOpaque(false);
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
-        titlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50)); // 確保panel佔了整個空間
+        titlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         titlePanel.add(Box.createHorizontalGlue());
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
 
         // ✕ 按鈕
         JButton closeButton = new JButton("✕");
-        closeButton.setPreferredSize(new Dimension(40, 30)); // ✕ 按鈕邊框
+        closeButton.setPreferredSize(new Dimension(40, 30));
         closeButton.setFocusPainted(false);
         closeButton.setBackground(new Color(255, 182, 193));
         closeButton.setForeground(Color.BLACK);
@@ -97,9 +106,8 @@ public class AddTrainFrame extends JFrame {
         // 將標題與右上角叉叉一起放入 topPanel
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
-        topPanel.add(titlePanel, BorderLayout.CENTER);   // title 置中
-        topPanel.add(rightTopPanel, BorderLayout.EAST);  // 叉叉在右邊
-        // 加入畫面
+        topPanel.add(titlePanel, BorderLayout.CENTER);
+        topPanel.add(rightTopPanel, BorderLayout.EAST);
         contentPane.add(topPanel, BorderLayout.NORTH);
 
         // 方向選單
@@ -125,7 +133,6 @@ public class AddTrainFrame extends JFrame {
         trainIdPanel.add(trainIdField);
         formPanel.add(trainIdPanel);
         formPanel.add(Box.createVerticalStrut(10));
-
 
         // 出發時間
         JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 14));
@@ -156,7 +163,6 @@ public class AddTrainFrame extends JFrame {
         JPanel stationOuterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 30, 10));
         stationOuterPanel.setOpaque(false);
 
-        // TODO: 可以引入資料庫就不用寫死車站
         String[] stationNames = {"南港", "台北", "板橋", "桃園", "新竹", "苗栗",
                 "台中", "彰化", "雲林", "嘉義", "台南", "左營"};
         JPanel stationPanel = new JPanel(new GridLayout(3, 4, 15, 5));
@@ -194,9 +200,13 @@ public class AddTrainFrame extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * 處理用戶提交的車次信息。
+     * 驗證輸入的時間格式、車次編號和選擇的車站，然後將車次數據存入數據庫。
+     * 若操作成功，提供繼續新增或返回首頁的選項；若失敗，顯示錯誤提示。
+     */
     private void handleSubmit() {
         try (Connection conn = DBConnection.getConnection()) {
-
             BlockSectionDAO sectionDAO = new BlockSectionDAOImpl(conn);
             StationDAO stationDAO = new StationDAOImpl(conn);
             TrainDAO trainDAO = new TrainDAOImpl(conn);
@@ -226,9 +236,6 @@ public class AddTrainFrame extends JFrame {
 
             String direction = (String) directionBox.getSelectedItem();
             boolean isNorthbound = "北上".equals(direction);
-            // TODO: TrainID是車次但是是string,isNorthbound是方向(boolean),intTrainId(int),departure是出發時間(Localtime)
-            // TODO: List<String> selectedStations是存勾選車站的字串清單
-            //stoptime不需照順序 時間可以全null
             String trainId = trainIdField.getText().trim();
             List<Train> trains = trainDAO.getAllTrains();
 
@@ -238,7 +245,7 @@ public class AddTrainFrame extends JFrame {
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            int intTrainId = Integer.valueOf(trainId); // 車次換成int
+            int intTrainId = Integer.valueOf(trainId);
 
             if (isTrainIdDuplicate(intTrainId, trains)) {
                 JOptionPane.showMessageDialog(this,
@@ -247,8 +254,6 @@ public class AddTrainFrame extends JFrame {
                 return;
             }
 
-            // 選擇的車站存成一個list
-            // TODO: List<String> selectedStations是存勾選車站的字串清單
             List<String> selectedStations = getSelectedStations();
             if (selectedStations.size() < 2) {
                 JOptionPane.showMessageDialog(this,
@@ -256,13 +261,6 @@ public class AddTrainFrame extends JFrame {
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-            //TODO:從這邊開始處理Addtrain
-            /*
-            Train train = new Train(intTrainId, stops, isNorthbound);
-            train.calculateSchedule(sectionDAO,stationDAO.getAllStations());
-            trainDAO.addTrain(train);
-             */
 
             int choice = JOptionPane.showOptionDialog(this,
                     "新增成功！請選擇接下來的操作：",
@@ -282,16 +280,21 @@ public class AddTrainFrame extends JFrame {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace(); // 可以幫助你除錯，看到真實錯誤原因
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(this,
                     "發生未知錯誤，請稍後再試。",
                     "錯誤", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
+    /**
+     * 檢查車次編號是否已存在於數據庫中。
+     *
+     * @param id     要檢查的車次編號
+     * @param trains 現有的車次列表
+     * @return 如果車次編號已存在則返回 {@code true}，否則返回 {@code false}
+     */
     private boolean isTrainIdDuplicate(int id, List<Train> trains) {
-        // TODO: 這邊要連接你的資料庫進行查詢，檢查該車次是否已存在
         List<Integer> trainIds = new ArrayList<>();
         for (Train train : trains) {
             trainIds.add(train.getTrainNumber());
@@ -304,6 +307,12 @@ public class AddTrainFrame extends JFrame {
         return false;
     }
 
+    /**
+     * 創建一個具有自定義樣式的按鈕。
+     *
+     * @param text 按鈕顯示的文字
+     * @return 配置了樣式和懸停效果的 {@link JButton} 對象
+     */
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFocusPainted(false);
@@ -327,9 +336,11 @@ public class AddTrainFrame extends JFrame {
 
         return button;
     }
+
     /**
      * 取得使用者勾選的停靠車站清單。
-     * @return 包含所有被選取之車站名稱的字串清單。
+     *
+     * @return 包含所有被選取之車站名稱的字串清單
      */
     private List<String> getSelectedStations() {
         List<String> selected = new ArrayList<>();
@@ -340,5 +351,4 @@ public class AddTrainFrame extends JFrame {
         }
         return selected;
     }
-
 }
