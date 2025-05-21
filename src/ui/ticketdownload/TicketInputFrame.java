@@ -34,8 +34,6 @@ public class TicketInputFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        initializeTrainStops();
-
         JPanel contentPane = new GradientPanel();
         contentPane.setLayout(new BorderLayout());
 
@@ -158,7 +156,7 @@ public class TicketInputFrame extends JFrame {
                 return;
             }
 
-            // 取得時間（移除假資料註解）
+            // 取得時間
             String departureTime = departureStop.getDepartureTime().toString();
             String arrivalTime = arrivalStop.getArrivalTime().toString();
 
@@ -200,13 +198,8 @@ public class TicketInputFrame extends JFrame {
     }
 
     // TODO: 跟資料庫確認輸入的火車班次是不是確實有停輸入的兩個車站
-    private void initializeTrainStops() {
-        trainStops.put("1234", Arrays.asList("板橋", "台北", "桃園", "新竹", "台中", "嘉義", "台南", "左營"));
-        trainStops.put("5678", Arrays.asList("台北", "南港", "桃園", "新竹", "苗栗", "台中", "彰化"));
-        trainStops.put("4321", Arrays.asList("左營", "台南", "嘉義", "台中", "新竹", "桃園", "台北", "板橋"));
-    }
 
     private String[] getAllStations() {
-        return new String[]{"板橋", "台北", "南港", "桃園", "新竹", "苗栗", "台中", "彰化", "雲林", "嘉義", "台南", "左營"};
+        return new String[]{"南港", "台北", "板橋", "桃園", "新竹", "苗栗", "台中", "彰化", "雲林", "嘉義", "台南", "左營"};
     }
 }
