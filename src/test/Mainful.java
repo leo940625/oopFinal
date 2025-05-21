@@ -16,7 +16,7 @@ public class Mainful {
 
             TrainDAO trainDAO = new TrainDAOImpl(conn);
             StopTimeDAO stopTimeDAO = new StopTimeDAOImpl(conn);
-            StationDAO stationDAO = new StationDAOImpl();
+            StationDAO stationDAO = new StationDAOImpl(conn);
             // 建立停靠站資料
 
             List<StopTime> stopTimes = new ArrayList<>();

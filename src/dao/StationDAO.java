@@ -7,4 +7,5 @@ import java.util.List;
 public interface StationDAO {
     List<Station> getAllStations();
     public Station getStationById(int stationId);
+    public Station getStationByName(String stationName);
 }

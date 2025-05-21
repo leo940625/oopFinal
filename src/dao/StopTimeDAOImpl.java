@@ -42,7 +42,7 @@ public class StopTimeDAOImpl implements StopTimeDAO {
     @Override
     public List<StopTime> getStopTimesByTrain(int trainNumber) {
         List<StopTime> stopTimes = new ArrayList<>();
-        StationDAOImpl sta = new StationDAOImpl();
+        StationDAOImpl sta = new StationDAOImpl(conn);
 
         String sql = "SELECT station_id, arrival_time, departure_time FROM StopTime WHERE train_number = ? ORDER BY stop_order";
 

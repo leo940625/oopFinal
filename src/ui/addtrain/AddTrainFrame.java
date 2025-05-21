@@ -189,7 +189,7 @@ public class AddTrainFrame extends JFrame {
         try (Connection conn = DBConnection.getConnection()) {
 
             BlockSectionDAO sectionDAO = new BlockSectionDAOImpl(conn);
-            StationDAO stationDAO = new StationDAOImpl();
+            StationDAO stationDAO = new StationDAOImpl(conn);
             TrainDAO trainDAO = new TrainDAOImpl(conn);
 
             // 驗證時間格式與範圍

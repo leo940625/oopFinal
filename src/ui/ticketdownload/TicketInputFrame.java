@@ -5,7 +5,19 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
+
+import model.*;
 import ui.GradientPanel;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.*;
+import util.DBConnection;
+
 /**
  * 輸入車票資訊
  */
@@ -14,6 +26,7 @@ public class TicketInputFrame extends JFrame {
     private JComboBox<String> departureBox;
     private JComboBox<String> arrivalBox;
     private static final Map<String, java.util.List<String>> trainStops = new HashMap<>();
+    private static final String TRAIN_NUMBER_PATTERN = "\\d{4}";
 
     public TicketInputFrame() {
         setTitle("車票下載");
@@ -86,35 +99,79 @@ public class TicketInputFrame extends JFrame {
     }
 
     private void handlePreview() {
-        String trainNumber = trainNumberField.getText();
-        String departureStation = (String) departureBox.getSelectedItem();
-        String arrivalStation = (String) arrivalBox.getSelectedItem();
+        try (Connection conn = DBConnection.getConnection()) {
+            // 初始化 DAO，確保一致性
+            BlockSectionDAO sectionDAO = new BlockSectionDAOImpl(conn);
+            StationDAO stationDAO = new StationDAOImpl(conn); // 傳入連線
+            TrainDAO trainDAO = new TrainDAOImpl(conn);
 
-        if (!trainStops.containsKey(trainNumber)) {
-            JOptionPane.showMessageDialog(this, "查無此車次！", "錯誤", JOptionPane.ERROR_MESSAGE);
-            return;
+            // 取得輸入並清理
+            String trainNumber = trainNumberField.getText().trim();
+            String departureStationName = (String) departureBox.getSelectedItem();
+            String arrivalStationName = (String) arrivalBox.getSelectedItem();
+
+            // 驗證車次編號格式
+            if (!trainNumber.matches("\\d{4}")) {
+                JOptionPane.showMessageDialog(this, "請輸入 4 位數字作為車次編號！", "錯誤", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 解析車次編號
+            int trainId = Integer.parseInt(trainNumber);
+
+            // 查詢車次和站點
+            Train train = trainDAO.getTrainByNumber(trainId);
+            if (train == null) {
+                JOptionPane.showMessageDialog(this, "查無此車次！", "錯誤", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Station departureStation = stationDAO.getStationByName(departureStationName);
+            Station arrivalStation = stationDAO.getStationByName(arrivalStationName);
+            if (departureStation == null || arrivalStation == null) {
+                JOptionPane.showMessageDialog(this, "無效的出發站或到達站！", "錯誤", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 尋找出發和到達站的停靠時間
+            List<StopTime> stops = train.getStopTimes();
+            StopTime departureStop = stops.stream()
+                    .filter(stop -> stop.getStation().getStationId() == departureStation.getStationId())
+                    .findFirst()
+                    .orElse(null);
+            StopTime arrivalStop = stops.stream()
+                    .filter(stop -> stop.getStation().getStationId() == arrivalStation.getStationId())
+                    .findFirst()
+                    .orElse(null);
+
+            // 驗證停靠站和方向
+            if (departureStop == null || arrivalStop == null) {
+                JOptionPane.showMessageDialog(this, "車次未停靠指定的出發站或到達站！", "錯誤", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int departureStationId = departureStation.getStationId();
+            int arrivalStationId = arrivalStation.getStationId();
+            int direction = train.getDirection() ? 1 : -1;
+            if ((departureStationId - arrivalStationId) * direction <= 0) {
+                JOptionPane.showMessageDialog(this, "車次方向或站點順序無效！", "錯誤", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // 取得時間（移除假資料註解）
+            String departureTime = departureStop.getDepartureTime().toString();
+            String arrivalTime = arrivalStop.getArrivalTime().toString();
+
+            // 開啟預覽視窗並關閉當前視窗
+            new TicketPreviewFrame(departureStationName, arrivalStationName, departureTime, arrivalTime, trainNumber);
+            dispose();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "資料庫錯誤：" + e.getMessage(), "錯誤", JOptionPane.ERROR_MESSAGE);
         }
-
-        java.util.List<String> stops = trainStops.get(trainNumber);
-        int depIdx = stops.indexOf(departureStation);
-        int arrIdx = stops.indexOf(arrivalStation);
-
-        if (depIdx == -1 || arrIdx == -1) {
-            JOptionPane.showMessageDialog(this, "資料錯誤！", "錯誤", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (depIdx >= arrIdx) {
-            JOptionPane.showMessageDialog(this, "資料錯誤！", "錯誤", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // TODO:假資料，連後端
-        String departureTime = "08:00";
-        String arrivalTime = "10:30";
-
-        new TicketPreviewFrame(departureStation, arrivalStation, departureTime, arrivalTime, trainNumber);
-        dispose();
     }
+
 
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
@@ -128,9 +185,12 @@ public class TicketInputFrame extends JFrame {
         button.setOpaque(true);
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(255, 105, 180));
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(255, 182, 193));
             }
