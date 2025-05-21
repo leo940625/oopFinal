@@ -26,7 +26,6 @@ public class TicketInputFrame extends JFrame {
     private JComboBox<String> departureBox;
     private JComboBox<String> arrivalBox;
     private static final Map<String, java.util.List<String>> trainStops = new HashMap<>();
-    private static final String TRAIN_NUMBER_PATTERN = "\\d{4}";
 
     public TicketInputFrame() {
         setTitle("車票下載");
