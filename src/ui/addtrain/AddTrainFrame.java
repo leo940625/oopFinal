@@ -24,7 +24,16 @@ public class AddTrainFrame extends JFrame {
     private JCheckBox[] stationChecks;
     private JTextField trainIdField;
 
+    public static void openIfAuthenticated(Component parent, boolean isLoggedIn) {
+        if (isLoggedIn) {
+            new AddTrainFrame().setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(parent, "請先登入員工帳號才能新增車次！", "權限不足", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public AddTrainFrame() {
+
         setTitle("新增車次");
         setSize(500, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

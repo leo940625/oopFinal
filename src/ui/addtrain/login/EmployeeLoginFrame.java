@@ -70,7 +70,6 @@ public class EmployeeLoginFrame extends JFrame {
         String password = new String(passwordField.getPassword());
 
         // 直接寫死帳密在程式裡 TODO:還是要創員工資料庫？
-        // "csld", "9@y" TODO:考慮換帳號密碼
         if (username.equals("admin") && password.equals("1234")) {
             new AddTrainFrame(); // 登入成功後進入新增車次
             dispose();

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import ui.addtrain.AddTrainFrame;
+import ui.addtrain.login.*;
 import ui.ticketdownload.*;
 /**
  * 首頁畫面 含四個選項
@@ -32,9 +33,15 @@ public class HomeFrame extends JFrame {
 
         for (String name : buttonNames) {
             JButton btn = createStyledButton(name);
+            /*
             if (name.equals("新增車次")) {
                 btn.addActionListener(e -> {
                     new AddTrainFrame();
+                    dispose();
+                });*/
+            if (name.equals("新增車次")) {
+                btn.addActionListener(e -> {
+                    new LoginChoiceFrame();
                     dispose();
                 });
             } else if (name.equals("車票下載")) {
