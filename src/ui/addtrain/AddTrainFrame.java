@@ -1,6 +1,8 @@
 package ui.addtrain;
 
 import dao.*;
+import model.Station;
+import model.StopTime;
 import model.Train;
 import ui.GradientPanel;
 import ui.HomeFrame;
@@ -254,13 +256,20 @@ public class AddTrainFrame extends JFrame {
                 return;
             }
 
-            List<String> selectedStations = getSelectedStations();
-            if (selectedStations.size() < 2) {
+            List<StopTime> stops = this.getSelectedStations();
+
+            if (stops.size() < 2) {
                 JOptionPane.showMessageDialog(this,
                         "請至少選擇兩個停靠車站！",
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
+            /*
+            Train train = new Train(intTrainId, stops, isNorthbound);
+            train.calculateSchedule(sectionDAO,stationDAO.getAllStations());
+            trainDAO.addTrain(train);
+             */
 
             int choice = JOptionPane.showOptionDialog(this,
                     "新增成功！請選擇接下來的操作：",
@@ -342,13 +351,24 @@ public class AddTrainFrame extends JFrame {
      *
      * @return 包含所有被選取之車站名稱的字串清單
      */
-    private List<String> getSelectedStations() {
-        List<String> selected = new ArrayList<>();
-        for (JCheckBox cb : stationChecks) {
-            if (cb.isSelected()) {
-                selected.add(cb.getText());
+    private List<StopTime> getSelectedStations() {
+        try (Connection conn = DBConnection.getConnection()) {
+            StationDAO stationDAO = new StationDAOImpl(conn);
+            List<StopTime> selected = new ArrayList<>();
+            for (JCheckBox cb : stationChecks) {
+                if (cb.isSelected()) {
+                    Station state = stationDAO.getStationByName(cb.getText());
+                    StopTime st = new StopTime(state,null,null);
+                    selected.add(st);
+                }
             }
+            return selected;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "發生未知錯誤，請稍後再試。",
+                    "錯誤", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        return selected;
     }
 }
