@@ -35,7 +35,7 @@ public class AddTrainFrame extends JFrame {
     public AddTrainFrame() {
 
         setTitle("新增車次");
-        setSize(500, 500);
+        setSize(600, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 

@@ -14,7 +14,7 @@ public class EmployeeLoginFrame extends JFrame {
 
     public EmployeeLoginFrame() {
         setTitle("員工登入");
-        setSize(400, 400);
+        setSize(600, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -24,14 +24,14 @@ public class EmployeeLoginFrame extends JFrame {
 
         // 中央白色面板
         JPanel loginPanel = new JPanel();
-        loginPanel.setPreferredSize(new Dimension(300, 250));
+        loginPanel.setPreferredSize(new Dimension(400, 250));
         loginPanel.setBackground(Color.WHITE);
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
         loginPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         // 標題
         JLabel titleLabel = new JLabel("員工登入", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginPanel.add(titleLabel);
 

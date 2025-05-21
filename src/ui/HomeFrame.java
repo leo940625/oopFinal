@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import ui.addtrain.AddTrainFrame;
 import ui.addtrain.login.*;
+import ui.searchtrain.TrainSearchChoiceFrame;
 import ui.ticketdownload.*;
 /**
  * 首頁畫面 含四個選項
@@ -47,6 +48,11 @@ public class HomeFrame extends JFrame {
             } else if (name.equals("車票下載")) {
                 btn.addActionListener(e -> {
                     new TicketInputFrame(); // 改成先跳輸入畫面
+                    dispose();
+                });
+            } else if (name.equals("列車查詢")) { // TODO:嘗試加入新功能ing
+                btn.addActionListener(e -> {
+                    new TrainSearchChoiceFrame();
                     dispose();
                 });
             } else {

@@ -1,19 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package ui.addtrain.login;
+package ui.searchtrain;
 
 import javax.swing.*;
 import java.awt.*;
-import ui.*;
+
+import ui.BackgroundPanel;
+import ui.HomeFrame;
+import ui.addtrain.login.EmployeeLoginFrame;
 
 /**
- * 新增班次時要先確認是否是員工
+ * 選擇「列車查詢」後要先選擇查詢的方法（用車次號碼查還是用起始終點車站）
  */
-public class LoginChoiceFrame extends JFrame {
-    public LoginChoiceFrame() {
-        setTitle("登入選擇");
+
+public class TrainSearchChoiceFrame extends JFrame{
+    public TrainSearchChoiceFrame() {
+        setTitle("查詢選擇");
         setSize(600, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -30,7 +30,7 @@ public class LoginChoiceFrame extends JFrame {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // 內距
 
         // 標題
-        JLabel titleLabel = new JLabel("員工職權", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("列車查詢", SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
         centerPanel.add(titleLabel, BorderLayout.NORTH);
 
@@ -39,7 +39,7 @@ public class LoginChoiceFrame extends JFrame {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.setOpaque(false);
 
-        JButton employeeButton = new JButton("<html><div style='text-align: center;'>我是員工<br>(登入)</div></html>");
+        JButton employeeButton = new JButton("<html><div style='text-align: center;'>依起訖車站</div></html>");
         styleButton(employeeButton);
         employeeButton.setPreferredSize(new Dimension(180, 80));
         employeeButton.setMaximumSize(new Dimension(180, 80));
@@ -47,11 +47,11 @@ public class LoginChoiceFrame extends JFrame {
         employeeButton.setVerticalAlignment(SwingConstants.CENTER);
         employeeButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         employeeButton.addActionListener(e -> {
-            new EmployeeLoginFrame(); // 開啟員工登入畫面
+            new TrainSearchSFrame();
             dispose();
         });
 
-        JButton guestButton = new JButton("<html><div style='text-align: center;'>我是訪客<br>(退出)</div></html>");
+        JButton guestButton = new JButton("<html><div style='text-align: center;'>依車次號碼</div></html>");
         styleButton(guestButton);
         guestButton.setPreferredSize(new Dimension(180, 80));
         guestButton.setMaximumSize(new Dimension(180, 80));
@@ -59,7 +59,7 @@ public class LoginChoiceFrame extends JFrame {
         guestButton.setVerticalAlignment(SwingConstants.CENTER);
         guestButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         guestButton.addActionListener(e -> {
-            new HomeFrame(); // 返回主畫面
+            new TrainSearchIDFrame(); // 返回主畫面
             dispose();
         });
 

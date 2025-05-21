@@ -6,7 +6,6 @@ import java.net.URL;
 
 /**
  * LoginChoiceFrame背景
- * 還沒帶進去不知道有沒有成功
  */
 public class BackgroundPanel extends JPanel {
     private Image backgroundImage;
@@ -31,7 +30,22 @@ public class BackgroundPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (backgroundImage != null) {
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            int panelWidth = getWidth();
+            int panelHeight = getHeight();
+
+            int imgWidth = backgroundImage.getWidth(this);
+            int imgHeight = backgroundImage.getHeight(this);
+
+            // 計算縮放比例（保持圖片比例）
+            double scale = Math.min((double) panelWidth / imgWidth, (double) panelHeight / imgHeight);
+            int drawWidth = (int) (imgWidth * scale);
+            int drawHeight = (int) (imgHeight * scale);
+
+            // 置中置頂顯示
+            int x = (panelWidth - drawWidth) / 2;
+            int y = 0;
+
+            g.drawImage(backgroundImage, x, y, drawWidth, drawHeight, this);
         }
     }
 }
