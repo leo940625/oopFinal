@@ -1,13 +1,13 @@
 package dao;
 
-import model.StopTime;
-import model.Train;
+import model.*;
 import util.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,5 +138,59 @@ public class TrainDAOImpl implements TrainDAO {
             e.printStackTrace();
         }
         return trains;
+    }
+
+    /**
+     * 查詢所有從 from 出發、到 to 到達的列車清單，並依據條件過濾：
+     * - 若 afterTime 為 null，回傳所有符合路線順序的列車
+     * - 若 afterTime 不為 null，僅回傳出發時間晚於該時間的列車
+     *
+     * @param from       出發站（Station 物件）
+     * @param to         到達站（Station 物件）
+     * @param afterTime  過濾出發時間（可為 null 表示不限時間）
+     * @return 符合條件的列車清單
+     */
+    @Override
+    public List<Train> findTrainsBetween(Station from, Station to, LocalTime afterTime) {
+        int fromId = from.getStationId();
+        int toId = to.getStationId();
+        List<Train> result = new ArrayList<>();
+
+        try {
+            List<Train> allTrains = getAllTrains();
+
+            for (Train train : allTrains) {
+                List<StopTime> stops = train.getStopTimes();
+
+                int fromIdx = -1;
+                int toIdx = -1;
+                StopTime fromStop = null;
+
+                for (int i = 0; i < stops.size(); i++) {
+                    int sid = stops.get(i).getStation().getStationId();
+                    if (sid == fromId) {
+                        fromIdx = i;
+                        fromStop = stops.get(i);
+                    }
+                    if (sid == toId) {
+                        toIdx = i;
+                    }
+                }
+
+                // 兩站都存在且順序正確
+                if (fromIdx != -1 && toIdx != -1 && fromIdx < toIdx) {
+                    if (afterTime == null ||
+                            (fromStop != null && fromStop.getDepartureTime() != null
+                                    && fromStop.getDepartureTime().isAfter(afterTime))) {
+                        result.add(train);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

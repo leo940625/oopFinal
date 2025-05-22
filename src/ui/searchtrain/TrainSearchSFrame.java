@@ -76,10 +76,11 @@ public class TrainSearchSFrame extends JFrame {
 
             try (Connection conn = DBConnection.getConnection()) {
                 TrainDAO trainDAO = new TrainDAOImpl(conn);
+                StationDAO stationDAO = new StationDAOImpl(conn);
                 // TODO: 這邊要寫一下findTrainsBetween的功能是找起訖站對應的車次們
                 //  result 就是符合我起訖站的車次們, from是出發車站，to是抵達車站（型別是string 67、68行）
                 // TODO: 我的理解是車次帶著其他資訊 應該沒有理解錯誤吧？
-                List<Train> result = trainDAO.findTrainsBetween(from, to);
+                List<Train> result = trainDAO.findTrainsBetween(stationDAO.getStationByName(from),stationDAO.getStationByName(to),null);
 
                 if (result.isEmpty()) {
                     Object[] options = {"重新查詢", "回首頁"};
