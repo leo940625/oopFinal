@@ -2,8 +2,16 @@ package ui.searchtrain;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
+import ui.HomeFrame;
+import dao.*;
+import model.*;
+import util.DBConnection;
+import java.sql.*;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.List;
+import java.util.Arrays;
+import ui.searchtrain.TrainInformationFrame;
 
 /**
  * 查詢列車：起訖站選擇畫面
@@ -66,9 +74,66 @@ public class TrainSearchSFrame extends JFrame {
                 return;
             }
 
+            try (Connection conn = DBConnection.getConnection()) {
+                TrainDAO trainDAO = new TrainDAOImpl(conn);
+                // TODO: 這邊要寫一下findTrainsBetween的功能是找起訖站對應的車次們
+                //  result 就是符合我起訖站的車次們
+                // TODO: 我的理解是車次帶著其他資訊 應該沒有理解錯誤吧？
+                List<Train> result = trainDAO.findTrainsBetween(from, to);
+
+                if (result.isEmpty()) {
+                    Object[] options = {"重新查詢", "回首頁"};
+                    int choice = JOptionPane.showOptionDialog(
+                            this,
+                            "查無符合條件的列車。",
+                            "查無資料",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE,
+                            null,
+                            options,
+                            options[0]
+                    );
+
+                    if (choice == JOptionPane.NO_OPTION) {
+                        this.dispose();
+                        new HomeFrame().setVisible(true);
+                    }
+                    // YES_OPTION：什麼都不做，讓使用者繼續查詢
+                    return;
+                }
+
+                // 切換到顯示查詢結果的新視窗
+                new TrainInformationFrame(result).setVisible(true);
+                this.dispose(); // 關掉目前畫面
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+
+                String message = "查詢失敗，請稍後再試。";
+                String title = "錯誤";
+
+                Object[] options = {"重新查詢", "回首頁"};
+                int choice = JOptionPane.showOptionDialog(
+                        this,
+                        message,
+                        title,
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.ERROR_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+
+                if (choice == JOptionPane.NO_OPTION) {
+                    this.dispose(); // 關閉目前查詢畫面
+                    new HomeFrame().setVisible(true); // 回首頁
+                }
+                // 若選擇重新查詢（YES_OPTION），就什麼都不做
+            }
+        });
+
             // TODO: 這邊要執行查詢動作 ㄜ直接跳進下一個Frame再抓資料庫嗎
             // new TrainSearchInformationFrame(...);
-        });
 
         formPanel.add(searchButton);
         formPanel.add(Box.createVerticalGlue());  // 空間底部推開 查詢就不會擠在最下面
