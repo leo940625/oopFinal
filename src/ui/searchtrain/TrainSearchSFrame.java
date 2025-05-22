@@ -110,13 +110,13 @@ public class TrainSearchSFrame extends JFrame {
                 ex.printStackTrace();
 
                 String message = "查詢失敗，請稍後再試。";
-                String title = "錯誤";
+                String errorDialogTitle = "錯誤";
 
                 Object[] options = {"重新查詢", "回首頁"};
                 int choice = JOptionPane.showOptionDialog(
                         this,
                         message,
-                        title,
+                        errorDialogTitle,
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.ERROR_MESSAGE,
                         null,
