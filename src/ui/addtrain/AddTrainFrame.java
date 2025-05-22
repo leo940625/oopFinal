@@ -265,11 +265,10 @@ public class AddTrainFrame extends JFrame {
                 return;
             }
 
-            /*
+
             Train train = new Train(intTrainId, stops, isNorthbound);
-            train.calculateSchedule(sectionDAO,stationDAO.getAllStations());
+            train.calculateSchedule(sectionDAO,stationDAO.getAllStations(),departure);
             trainDAO.addTrain(train);
-             */
 
             int choice = JOptionPane.showOptionDialog(this,
                     "新增成功！請選擇接下來的操作：",
