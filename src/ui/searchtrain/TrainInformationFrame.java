@@ -1,5 +1,6 @@
 package ui.searchtrain;
 
+import model.StopTime;
 import model.Train;
 import ui.GradientPanel;
 
@@ -41,8 +42,11 @@ public class TrainInformationFrame extends JFrame {
             JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT));
             row.setOpaque(false);
 
-            String info = train.getId() + "　" + train.getDirection() + "　" +
-                    train.getStartStation() + "→" + train.getEndStation();
+            List<StopTime> stoplist = train.getStopTimes();
+            int length = stoplist.size();
+            String info = train.getTrainNumber() + "　" + train.getDirection() + "　" +
+                    stoplist.get(0).getStation().getStationName() + "→" +
+                    stoplist.get(length).getStation().getStationName();
 
             JLabel label = new JLabel(info);
             JButton detailButton = new JButton("經過車站");
@@ -72,6 +76,7 @@ public class TrainInformationFrame extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             List<Train> demoList = new ArrayList<>();
+
             demoList.add(new Train("401", "南下", "台北", "台中", List.of("台北", "板橋", "新竹", "台中")));
             demoList.add(new Train("402", "北上", "高雄", "台南", List.of("高雄", "左營", "台南")));
             demoList.add(new Train("403", "南下", "桃園", "台南", List.of("桃園", "台中", "彰化", "台南")));
