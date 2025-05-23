@@ -127,22 +127,16 @@ public class TicketInputFrame extends JFrame {
 
             Station departureStation = stationDAO.getStationByName(departureStationName);
             Station arrivalStation = stationDAO.getStationByName(arrivalStationName);
+
             if (departureStation == null || arrivalStation == null) {
                 JOptionPane.showMessageDialog(this, "無效的出發站或到達站！", "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // 尋找出發和到達站的停靠時間
-
-            List<StopTime> stops = train.getStopTimes();
-            StopTime departureStop = stops.stream()
-                    .filter(stop -> stop.getStation().getStationId() == departureStation.getStationId())
-                    .findFirst()
-                    .orElse(null);
-            StopTime arrivalStop = stops.stream()
-                    .filter(stop -> stop.getStation().getStationId() == arrivalStation.getStationId())
-                    .findFirst()
-                    .orElse(null);
+            StopTime deparr[] = trainUtils.findDepartureAndArrivalStops(train, departureStation, arrivalStation);
+            StopTime departureStop = deparr[0];
+            StopTime arrivalStop = deparr[1];
 
             // 驗證停靠站和方向
             if (departureStop == null || arrivalStop == null) {
