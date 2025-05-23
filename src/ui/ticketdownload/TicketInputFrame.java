@@ -17,6 +17,7 @@ import java.util.List;
 
 import dao.*;
 import util.DBConnection;
+import util.TrainUtils;
 
 /**
  * 輸入車票資訊
@@ -101,6 +102,7 @@ public class TicketInputFrame extends JFrame {
             BlockSectionDAO sectionDAO = new BlockSectionDAOImpl(conn);
             StationDAO stationDAO = new StationDAOImpl(conn); // 傳入連線
             TrainDAO trainDAO = new TrainDAOImpl(conn);
+            TrainUtils trainUtils = new TrainUtils();
 
             // 取得輸入並清理
             String trainNumber = trainNumberField.getText().trim();
@@ -131,6 +133,7 @@ public class TicketInputFrame extends JFrame {
             }
 
             // 尋找出發和到達站的停靠時間
+
             List<StopTime> stops = train.getStopTimes();
             StopTime departureStop = stops.stream()
                     .filter(stop -> stop.getStation().getStationId() == departureStation.getStationId())
