@@ -3,6 +3,7 @@ package ui.searchtrain;
 import model.StopTime;
 import model.Station;
 import model.Train;
+import ui.HomeFrame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -44,14 +45,57 @@ public class TrainInformationFrame extends JFrame {
         titleLabel.setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10));
         add(titleLabel, BorderLayout.NORTH);
 
-        //add(buildTableScrollPane(), BorderLayout.CENTER);
         JPanel tableContainer = new JPanel(new BorderLayout());
         tableContainer.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10)); // ← 就是這行在控制位置！
         tableContainer.setOpaque(false);
         tableContainer.add(buildTableScrollPanel(), BorderLayout.CENTER);
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 20));
+        buttonPanel.setBackground(Color.WHITE);
+
+        JButton backButton = createStyledButton("回首頁");
+        backButton.addActionListener(e -> {
+            dispose();
+            new HomeFrame().setVisible(true);
+        });
+
+        JButton retryButton = createStyledButton("繼續查詢");
+        retryButton.addActionListener(e -> {
+            dispose();
+            new TrainSearchChoiceFrame().setVisible(true);
+        });
+
+        buttonPanel.add(retryButton);
+        buttonPanel.add(backButton);
+
+        tableContainer.add(buttonPanel, BorderLayout.SOUTH);
+
         add(tableContainer, BorderLayout.CENTER);
 
+    }
+
+    private JButton createStyledButton(String text) {
+        JButton button = new JButton(text);
+        Color baseColor = new Color(255, 182, 193);
+        Color hoverColor = new Color(255, 105, 180);
+        button.setFont(new Font("SansSerif", Font.BOLD, 16));
+        button.setBackground(baseColor);
+        button.setForeground(Color.BLACK);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        button.setContentAreaFilled(true);
+        button.setOpaque(true);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        button.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                button.setBackground(hoverColor);
+            }
+            public void mouseExited(MouseEvent evt) {
+                button.setBackground(baseColor);
+            }
+        });
+        return button;
     }
 
 

@@ -35,7 +35,7 @@ public class TrainSearchSFrame extends JFrame {
         formPanel.setOpaque(false);
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
 
-        JLabel title = new JLabel("起訖站選擇");
+        JLabel title = new JLabel("起訖站輸入");
         title.setFont(new Font("SansSerif", Font.BOLD, 25));
         title.setForeground(Color.BLACK);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);

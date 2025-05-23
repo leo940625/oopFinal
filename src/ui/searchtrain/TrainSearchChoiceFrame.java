@@ -47,7 +47,7 @@ public class TrainSearchChoiceFrame extends JFrame{
         employeeButton.setVerticalAlignment(SwingConstants.CENTER);
         employeeButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         employeeButton.addActionListener(e -> {
-            new TrainSearchSFrame();
+            new TrainSearchSFrame().setVisible(true); // 自動顯示畫面
             dispose();
         });
 
@@ -59,7 +59,7 @@ public class TrainSearchChoiceFrame extends JFrame{
         guestButton.setVerticalAlignment(SwingConstants.CENTER);
         guestButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         guestButton.addActionListener(e -> {
-            new TrainSearchIDFrame(); // 返回主畫面
+            new TrainSearchIDFrame().setVisible(true); // 自動顯示畫面
             dispose();
         });
 
