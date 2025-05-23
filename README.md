@@ -46,7 +46,11 @@
 │   │   │   ├── TicketPanel.java
 │   │   │   └── TicketInputFrame.java
 │   │   │
-│   │   ├── searchtrain/                 ← 列車查詢模組（尚未實作）
+│   │   ├── searchtrain/                 ← 列車查詢模組
+│   │   │   ├── TrainSearchSFrame.java   ← 用起訖車站查詢
+│   │   │   ├── TrainInformationFrame.java ← 用起訖車站查詢的結果顯示
+│   │   │   ├── TrainSearchIDFrame.java  ← 用車次查詢模組
+│   │   │   └── TrainDetailFrame.java    ← 用車次查詢模組的結果顯示
 │   │   │
 │   │   ├── contact/                     ← 聯絡資訊模組
 │   │   │
