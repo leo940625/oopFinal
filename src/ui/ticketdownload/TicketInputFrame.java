@@ -1,23 +1,19 @@
 package ui.ticketdownload;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Arrays;
-
-import model.*;
-import ui.GradientPanel;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import dao.*;
+import model.Station;
+import model.StopTime;
+import model.Train;
+import ui.GradientPanel;
 import util.DBConnection;
 import util.TrainUtils;
+
+import javax.swing.*;
+import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 輸入車票資訊
