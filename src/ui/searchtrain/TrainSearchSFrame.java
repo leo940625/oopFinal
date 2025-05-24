@@ -148,6 +148,7 @@ public class TrainSearchSFrame extends JFrame {
             /*
             // 此 DAO 設計需要外部提供 Connection，所以這裡自己用 try-with-resources 建立
             // 跟ID那邊不同
+            // TODO: 真緊張希望叫資料庫是對的（這段是我最沒把握的）
 
             try (Connection conn = DBConnection.getConnection()) {
                 TrainDAO trainDAO = new TrainDAOImpl(conn);

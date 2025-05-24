@@ -34,12 +34,7 @@ public class HomeFrame extends JFrame {
 
         for (String name : buttonNames) {
             JButton btn = createStyledButton(name);
-            /*
-            if (name.equals("新增車次")) {
-                btn.addActionListener(e -> {
-                    new AddTrainFrame();
-                    dispose();
-                });*/
+
             if (name.equals("新增車次")) {
                 btn.addActionListener(e -> {
                     new LoginChoiceFrame();
@@ -50,7 +45,7 @@ public class HomeFrame extends JFrame {
                     new TicketInputFrame(); // 改成先跳輸入畫面
                     dispose();
                 });
-            } else if (name.equals("列車查詢")) { // TODO:嘗試加入新功能ing
+            } else if (name.equals("列車查詢")) {
                 btn.addActionListener(e -> {
                     new TrainSearchChoiceFrame();
                     dispose();
