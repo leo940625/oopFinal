@@ -79,16 +79,14 @@ public class TrainSearchIDFrame extends JFrame {
 
             int trainNumber = Integer.parseInt(input);
 
-            // ✅ 假資料版本
+            // ✅ 假資料版本 要刪的時候下面findDemoTrainByNumber也可以刪
             Train train = findDemoTrainByNumber(trainNumber);
 
             // 🔽 若接資料庫，請改用下方區塊：
             /*
-            try (Connection conn = DBConnection.getConnection()) {
-                TrainDAO dao = new TrainDAOImpl(conn);
-                Train train = dao.getTrainByNumber(trainNumber);
-                // TODO: getTrainByNumber? 我可以直接抓後端資料嗎
-                // TODO: 看起來是新函式但應該沒必要等呱呱有空處理
+            TrainDAO dao = new TrainDAOImpl(conn);
+            Train train = dao.getTrainByNumber(trainNumber);
+            // TODO: 已確認，沒意外會是對的呼叫
             */
 
 
@@ -97,8 +95,6 @@ public class TrainSearchIDFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "查無此車次，請確認後重新輸入。", "查無資料", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            // train 是一個Train型別ㄟ TODO:（不太確定這樣有沒有是以車次號碼為依據叫資料 我要試看看）
-            // 同90行的疑問 要再想想
 
             new TrainDetailFrame(train).setVisible(true);
             this.dispose();

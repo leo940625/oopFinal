@@ -133,7 +133,7 @@ public class TrainInformationFrame extends JFrame {
                     departureTime,
                     toStation,
                     arrivalTime,
-                    "經過車站" // 按鈕文字
+                    "更多資訊" // 按鈕文字
             });
         }
 
@@ -252,24 +252,12 @@ public class TrainInformationFrame extends JFrame {
         }
 
         public Object getCellEditorValue() {
+            /**
+             * 點「更多資訊」跳出整台車的資訊
+             */
             if (clicked) {
                 Train train = result.get(currentRow);
-                List<StopTime> stopTimes = train.getStopTimes();
-
-                List<String> passedStations = new ArrayList<>();
-                boolean between = false;
-
-                for (StopTime st : stopTimes) {
-                    String name = st.getStation().getStationName();
-                    if (name.equals(fromStation)) between = true;
-                    if (between) passedStations.add(name);
-                    if (name.equals(toStation)) break;
-                }
-
-                JOptionPane.showMessageDialog(null,
-                        String.join(" → ", passedStations),
-                        "經過站：" + fromStation + " 至 " + toStation,
-                        JOptionPane.INFORMATION_MESSAGE);
+                new TrainDetailFrame(train, fromStation, toStation).setVisible(true);
             }
             clicked = false;
             return label;
@@ -285,40 +273,6 @@ public class TrainInformationFrame extends JFrame {
         }
     }
 }
-
-    /*
-    // TODO: 功能錯ㄌ 用起訖站
-    String start = stoplist.get(0).getStation().getStationName();
-    String end = stoplist.get(stoplist.size() - 1).getStation().getStationName();
-    String directionText = train.getDirection() ? "北上" : "南下";
-
-    String info = train.getTrainNumber() + "　" + directionText + "　" + start + "→" + end;
-
-    JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            row.setOpaque(false);
-
-    JLabel label = new JLabel(info);
-    JButton detailButton = new JButton("經過車站");
-
-            detailButton.addActionListener(e -> {
-        String stationList = stoplist.stream()
-                .map(st -> st.getStation().getStationName())
-                .collect(Collectors.joining(" → "));
-        JOptionPane.showMessageDialog(this, stationList, "經過車站", JOptionPane.INFORMATION_MESSAGE);
-    });
-
-            row.add(label);
-            row.add(detailButton);
-            whitePanel.add(row);
-    */ //TODO:上面的搬家感覺很笨但應該有要用的程式碼？嗎
-
-    /*
-     * 🟧 未來與資料庫連結版本：
-     * 你可以從查詢畫面這樣呼叫：
-     * List<Train> result = trainDAO.findTrainsBetween(from, to);
-     * new TrainInformationFrame(result).setVisible(true);
-     */
-
 
 
 

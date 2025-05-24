@@ -129,6 +129,49 @@ public class TrainDetailFrame extends JFrame {
         return label;
     }
 
+    // 重載建構子（當我以起訖站查詢時想要看更多資訊）
+    public TrainDetailFrame(Train train, String from, String to) {
+        this(train); // 呼叫原始建構子初始化畫面
+
+        // 取得內容面板（GridLayout 表格）
+        JScrollPane scrollPane = (JScrollPane) getContentPane().getComponent(1);
+        JPanel tablePanel = (JPanel) scrollPane.getViewport().getView();
+
+        List<StopTime> stops = train.getStopTimes();
+        boolean between = false;
+
+        for (int i = 0; i < stops.size(); i++) {
+            StopTime st = stops.get(i);
+            String name = st.getStation().getStationName();
+
+            if (name.equals(from)) between = true;
+
+            if (between) { // 起訖站經過的車站名要用不同的粉色填滿突顯出來
+                for (int j = 0; j < 3; j++) { // 每列三欄
+                    Component cell = tablePanel.getComponent((i + 1) * 3); // +1 跳過標題
+                    if (cell instanceof JLabel label) {
+                        label.setBackground(new Color(255, 192, 203)); // 突出的粉紅
+                    }
+                }
+            }
+
+            if (name.equals(to)) break;
+        }
+
+        // 移除原本底部的兩個按鈕區域（注意：index = 2 是 SOUTH）
+        getContentPane().remove(2);
+
+        // 加入只有「關閉」按鈕的新按鈕區
+        JPanel closePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
+        closePanel.setBackground(Color.WHITE);
+
+        JButton closeButton = createStyledButton("關閉");
+        closeButton.addActionListener(e -> dispose());
+
+        closePanel.add(closeButton);
+        add(closePanel, BorderLayout.SOUTH);
+    }
+
     /**
      * 建立有粉紅 hover 效果的按鈕（給底部使用）
      */
