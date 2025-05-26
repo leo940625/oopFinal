@@ -116,7 +116,7 @@ public class AddTrainFrame extends JFrame {
         JPanel directionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 20));
         directionPanel.setOpaque(false);
         JLabel directionLabel = new JLabel("方向");
-        directionLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        directionLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
         directionBox = new JComboBox<>(new String[]{"南下", "北上"});
         directionBox.setFont(new Font("SansSerif", Font.PLAIN, 15));
         directionPanel.add(directionLabel);
@@ -128,7 +128,7 @@ public class AddTrainFrame extends JFrame {
         JPanel trainIdPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 14));
         trainIdPanel.setOpaque(false);
         JLabel trainIdLabel = new JLabel("車次編號");
-        trainIdLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        trainIdLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
         trainIdField = new JTextField(6);
         trainIdField.setFont(new Font("SansSerif", Font.PLAIN, 15));
         trainIdPanel.add(trainIdLabel);
@@ -140,7 +140,7 @@ public class AddTrainFrame extends JFrame {
         JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 14));
         timePanel.setOpaque(false);
         JLabel timeLabel = new JLabel("出發時間");
-        timeLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        timeLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
         hourField = new JTextField(2);
         minuteField = new JTextField(2);
         hourField.setFont(new Font("SansSerif", Font.PLAIN, 15));
@@ -156,7 +156,7 @@ public class AddTrainFrame extends JFrame {
         JPanel stationTitlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 14));
         stationTitlePanel.setOpaque(false);
         JLabel stationLabel = new JLabel("停靠車站");
-        stationLabel.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        stationLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
         stationTitlePanel.add(stationLabel);
         formPanel.add(stationTitlePanel);
         formPanel.add(Box.createVerticalStrut(5));

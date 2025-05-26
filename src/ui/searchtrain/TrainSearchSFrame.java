@@ -146,7 +146,7 @@ public class TrainSearchSFrame extends JFrame {
         row.setOpaque(false);
         row.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel label = new JLabel(labelText);
-        label.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        label.setFont(new Font("SansSerif", Font.BOLD, 18));
         comboBox.setPreferredSize(new Dimension(200, 30));
         row.add(label);
         row.add(comboBox);

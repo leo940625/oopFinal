@@ -3,6 +3,7 @@ package ui;
 import ui.addtrain.login.LoginChoiceFrame;
 import ui.searchtrain.TrainSearchChoiceFrame;
 import ui.ticketdownload.TicketInputFrame;
+import ui.contact.ContactFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,6 +48,11 @@ public class HomeFrame extends JFrame {
             } else if (name.equals("列車查詢")) {
                 btn.addActionListener(e -> {
                     new TrainSearchChoiceFrame();
+                    dispose();
+                });
+            } else if (name.equals("聯絡客服")) {
+                btn.addActionListener(e -> {
+                    new ContactFrame();
                     dispose();
                 });
             } else {
