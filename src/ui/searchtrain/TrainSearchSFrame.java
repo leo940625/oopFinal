@@ -1,17 +1,19 @@
 package ui.searchtrain;
 
+import dao.StationDAO;
+import dao.StationDAOImpl;
+import dao.TrainDAO;
+import dao.TrainDAOImpl;
+import model.Train;
+import ui.HomeFrame;
+import util.DBConnection;
+
 import javax.swing.*;
 import java.awt.*;
-import ui.HomeFrame;
-import dao.*;
-import model.*;
-import util.DBConnection;
-import java.sql.*;
-import java.time.LocalTime;
-import java.util.*;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Arrays;
-import ui.searchtrain.TrainInformationFrame;
+import java.util.List;
 
 /**
  * 查詢列車：起訖站選擇畫面
@@ -44,7 +46,6 @@ public class TrainSearchSFrame extends JFrame {
         formPanel.add(title);
         formPanel.add(Box.createVerticalStrut(30));
 
-        // TODO: 假資料，可替換為 StationDAO 取得的資料
         List<String> stationNames = Arrays.asList("南港", "台北", "板橋", "桃園", "新竹", "苗栗",
                 "台中", "彰化", "雲林", "嘉義", "台南", "左營");
         String[] stationArray = stationNames.toArray(new String[0]);
@@ -73,82 +74,6 @@ public class TrainSearchSFrame extends JFrame {
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-            // TODO: 我試看看假資料看一下顯示畫面
-            // ✅ 用假資料取代資料庫查詢
-            List<Train> result = new ArrayList<>();
-
-            // ★ Demo 條件：如果是查詢「台北 → 台中」就顯示兩班車
-            if (from.equals("台北") && to.equals("台中")) {
-                Station taipei = new Station(1, "台北");
-                Station taoyuan = new Station(2, "桃園");
-                Station hsinchu = new Station(3, "新竹");
-                Station taichung = new Station(4, "台中");
-                Station lefttemp = new Station(5, "左營");
-
-                // 第一班車（1234）
-                List<StopTime> stops1 = new ArrayList<>();
-                stops1.add(new StopTime(taipei, null, LocalTime.of(8, 0)));
-                stops1.add(new StopTime(taoyuan, LocalTime.of(8, 30), LocalTime.of(8, 31)));
-                stops1.add(new StopTime(taichung,LocalTime.of(9, 10), LocalTime.of(9, 11)));
-                stops1.add(new StopTime(lefttemp, LocalTime.of(10, 30), null));
-                Train train1234 = new Train(1234, stops1, false); // false 表示南下
-
-                // 第二班車（5678）
-                List<StopTime> stops2 = new ArrayList<>();
-                stops2.add(new StopTime(taipei, null, LocalTime.of(9, 0)));
-                stops2.add(new StopTime(hsinchu, LocalTime.of(9, 35), LocalTime.of(9, 36)));
-                stops2.add(new StopTime(taichung, LocalTime.of(10, 15), null));
-                Train train5678 = new Train(5678, stops2, false);
-
-                // 第三班車（2468）
-                List<StopTime> stops3 = new ArrayList<>();
-                stops3.add(new StopTime(taipei, null, LocalTime.of(9, 0)));
-                stops3.add(new StopTime(hsinchu, LocalTime.of(9, 35), LocalTime.of(9, 36)));
-                stops3.add(new StopTime(taichung, LocalTime.of(10, 15), null));
-                Train train2468 = new Train(2468, stops3, false);
-
-                // 第三班車（1357）
-                List<StopTime> stops4 = new ArrayList<>();
-                stops4.add(new StopTime(taipei, null, LocalTime.of(9, 0)));
-                stops4.add(new StopTime(hsinchu, LocalTime.of(9, 35), LocalTime.of(9, 36)));
-                stops4.add(new StopTime(taichung, LocalTime.of(10, 15), null));
-                Train train1357 = new Train(1357, stops4, false);
-
-                result.add(train1234);
-                result.add(train5678);
-                result.add(train2468);
-                result.add(train1357);
-            }
-            if (result.isEmpty()) {
-                Object[] options = {"重新查詢", "回首頁"};
-                int choice = JOptionPane.showOptionDialog(
-                            this,
-                            "查無符合條件的列車。",
-                            "查無資料",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.INFORMATION_MESSAGE,
-                            null,
-                            options,
-                            options[0]
-                );
-
-                if (choice == JOptionPane.NO_OPTION) {
-                    this.dispose();
-                    new HomeFrame().setVisible(true);
-                }
-                // YES_OPTION：什麼都不做，讓使用者繼續查詢
-                return;
-            }
-
-            new TrainInformationFrame(result, from, to).setVisible(true);
-            this.dispose();
-            // TODO: Demo結束點
-
-            /*
-            // 此 DAO 設計需要外部提供 Connection，所以這裡自己用 try-with-resources 建立
-            // 跟ID那邊不同
-            // TODO: 真緊張希望叫資料庫是對的（這段是我最沒把握的）
 
             try (Connection conn = DBConnection.getConnection()) {
                 TrainDAO trainDAO = new TrainDAOImpl(conn);
@@ -180,7 +105,7 @@ public class TrainSearchSFrame extends JFrame {
                 }
 
                 // 切換到顯示查詢結果的新視窗
-                new new TrainInformationFrame(result, from, to).setVisible(true);
+                new TrainInformationFrame(result, from, to).setVisible(true);
                 this.dispose(); // 關掉目前畫面
 
             } catch (SQLException ex) {
@@ -206,7 +131,7 @@ public class TrainSearchSFrame extends JFrame {
                     new HomeFrame().setVisible(true); // 回首頁
                 }
                 // 若選擇重新查詢（YES_OPTION），就什麼都不做
-            }*/ // 資料庫暫時註解掉
+            } // 資料庫暫時註解掉
         });
 
         formPanel.add(searchButton);

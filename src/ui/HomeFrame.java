@@ -1,12 +1,11 @@
 package ui;
 
+import ui.addtrain.login.LoginChoiceFrame;
+import ui.searchtrain.TrainSearchChoiceFrame;
+import ui.ticketdownload.TicketInputFrame;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import ui.addtrain.AddTrainFrame;
-import ui.addtrain.login.*;
-import ui.searchtrain.TrainSearchChoiceFrame;
-import ui.ticketdownload.*;
 /**
  * 首頁畫面 含四個選項
  */

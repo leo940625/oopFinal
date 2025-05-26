@@ -2,19 +2,14 @@ package ui.searchtrain;
 
 import dao.TrainDAO;
 import dao.TrainDAOImpl;
-import model.Station;
-import model.StopTime;
 import model.Train;
 import ui.GradientPanel;
-
+import util.DBConnection;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.regex.Pattern;
-import java.util.List;
-import java.util.ArrayList;
 /**
  * 用車次編號查詢aka某車次的詳細資訊
  * 顯示於TrainDetailFrame.java
@@ -79,25 +74,25 @@ public class TrainSearchIDFrame extends JFrame {
 
             int trainNumber = Integer.parseInt(input);
 
-            // ✅ 假資料版本 要刪的時候下面findDemoTrainByNumber也可以刪
-            Train train = findDemoTrainByNumber(trainNumber);
+            try (Connection conn = DBConnection.getConnection()){
+                TrainDAO dao = new TrainDAOImpl(conn);
+                Train train = dao.getTrainByNumber(trainNumber);
+                // TODO: 已確認，沒意外會是對的呼叫
 
-            // 🔽 若接資料庫，請改用下方區塊：
-            /*
-            TrainDAO dao = new TrainDAOImpl(conn);
-            Train train = dao.getTrainByNumber(trainNumber);
-            // TODO: 已確認，沒意外會是對的呼叫
-            */
+                // 資料不存在提示
+                if (train == null) {
+                    JOptionPane.showMessageDialog(this, "查無此車次，請確認後重新輸入。", "查無資料", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-
-            // 資料不存在提示
-            if (train == null) {
-                JOptionPane.showMessageDialog(this, "查無此車次，請確認後重新輸入。", "查無資料", JOptionPane.ERROR_MESSAGE);
-                return;
+                new TrainDetailFrame(train).setVisible(true);
+                this.dispose();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                        "發生未知錯誤，請稍後再試。",
+                        "錯誤", JOptionPane.ERROR_MESSAGE);
             }
-
-            new TrainDetailFrame(train).setVisible(true);
-            this.dispose();
         });
 
         setVisible(true); // 顯示視窗
@@ -128,28 +123,5 @@ public class TrainSearchIDFrame extends JFrame {
                 button.setBackground(baseColor);
             }
         });
-    }
-
-    /**
-     * 建立假資料查詢：只支援 1234 為示範
-     */
-    private Train findDemoTrainByNumber(int number) {
-        if (number != 1234) return null;
-
-        List<StopTime> stops = new ArrayList<>();
-        stops.add(new StopTime(new Station(1, "台北"), null, java.time.LocalTime.of(8, 0)));
-        stops.add(new StopTime(new Station(2, "桃園"), java.time.LocalTime.of(8, 30), java.time.LocalTime.of(8, 31)));
-        stops.add(new StopTime(new Station(3, "新竹"), java.time.LocalTime.of(9, 0), java.time.LocalTime.of(9, 1)));
-        stops.add(new StopTime(new Station(4, "台中"), java.time.LocalTime.of(9, 40), java.time.LocalTime.of(9, 41)));
-        stops.add(new StopTime(new Station(5, "彰化"), java.time.LocalTime.of(8, 30), java.time.LocalTime.of(8, 0)));
-        stops.add(new StopTime(new Station(6, "苗栗"), java.time.LocalTime.of(8, 30), java.time.LocalTime.of(8, 31)));
-        stops.add(new StopTime(new Station(7, "台南"), java.time.LocalTime.of(9, 0), java.time.LocalTime.of(9, 1)));
-        stops.add(new StopTime(new Station(6, "苗栗"), java.time.LocalTime.of(8, 30), java.time.LocalTime.of(8, 31)));
-        stops.add(new StopTime(new Station(7, "台南"), java.time.LocalTime.of(9, 31), java.time.LocalTime.of(9, 0)));
-        stops.add(new StopTime(new Station(8, "左營"), java.time.LocalTime.of(9, 40), java.time.LocalTime.of(9, 41)));
-        stops.add(new StopTime(new Station(6, "苗栗"), java.time.LocalTime.of(8, 30), java.time.LocalTime.of(8, 31)));
-        stops.add(new StopTime(new Station(7, "台南"), java.time.LocalTime.of(9, 30), null));
-
-        return new Train(1234, stops, false);
     }
 }
