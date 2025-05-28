@@ -1,14 +1,10 @@
 import ui.HomeFrame;
-import javax.swing.SwingUtilities;
-import dao.*;
-import model.*;
-import util.DBConnection;
-import java.sql.*;
-import java.time.LocalTime;
-import java.util.*;
+
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new HomeFrame());
     }
 }
+//北上必有左營 南下必有南港

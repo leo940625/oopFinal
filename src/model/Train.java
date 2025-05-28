@@ -69,35 +69,39 @@ public class Train {
         return sb.toString();
     }
 
-    /**
-     * 根據起點站出發時間，完整路線站序，自動計算所有實際停靠站的到達與出發時間。
-     * 停靠站加 1 分鐘，過站只加通過時間。
-     *
-     * @param blockSectionDAO BlockSection 資料來源
-     * @param fullRoute       全路線依照方向排序的所有站點清單（ex: 台灣高鐵南下）
-     */
-    public void calculateSchedule(BlockSectionDAO blockSectionDAO, List<Station> fullRoute,LocalTime time) {
+    public void calculateSchedule(BlockSectionDAO blockSectionDAO, List<Station> fullRoute, LocalTime time) {
         if (stopTimes == null || stopTimes.size() < 2) return;
+
+        // 根據方向排序停靠站與 fullRoute
         if (this.direction) {
             stopTimes.sort(Comparator.comparingInt((StopTime st) -> st.getStation().getStationId()).reversed());
-        }else{
+            Collections.reverse(fullRoute);
+        } else {
             stopTimes.sort(Comparator.comparingInt(st -> st.getStation().getStationId()));
         }
-        stopTimes.get(0).setDepartureTime(time);
-        // 轉成 Map 方便快速查是否有停靠
+
+        // 設定實際起點站出發時間
+        stopTimes.getFirst().setDepartureTime(time);
+
+        // 轉成 Map 方便查詢
         Map<Integer, StopTime> stopTimeMap = stopTimes.stream()
                 .collect(Collectors.toMap(st -> st.getStation().getStationId(), st -> st));
 
-        // 根據方向排序路線（避免反向時錯位）
-        if (direction) {
-            Collections.reverse(fullRoute);
-        }
-        LocalTime currentTime = stopTimeMap.get(fullRoute.get(0).getStationId()).getDepartureTime();
+        // 找出 fullRoute 中第一個有出現在 stopTimeMap 的站當作起點
+        Station startingStation = fullRoute.stream()
+                .filter(st -> stopTimeMap.containsKey(st.getStationId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("無法在 fullRoute 中找到此列車的起點"));
+
+        // 取得起點的出發時間
+        LocalTime currentTime = stopTimeMap.get(startingStation.getStationId()).getDepartureTime();
         if (currentTime == null) {
             throw new IllegalStateException("出發站的出發時間尚未設定");
         }
 
-        for (int i = 1; i < fullRoute.size(); i++) {
+        // 從起點站開始往下走 fullRoute
+        int startIdx = fullRoute.indexOf(startingStation);
+        for (int i = startIdx + 1; i < fullRoute.size(); i++) {
             int fromId = fullRoute.get(i - 1).getStationId();
             int toId = fullRoute.get(i).getStationId();
 
@@ -107,10 +111,9 @@ public class Train {
             if (stopTimeMap.containsKey(toId)) {
                 StopTime currentStop = stopTimeMap.get(toId);
                 currentStop.setArrivalTime(currentTime);
-                currentTime = currentTime.plusMinutes(1); // 有停靠 → 加 1 分鐘
+                currentTime = currentTime.plusMinutes(1); // 停靠 → 加 1 分鐘
                 currentStop.setDepartureTime(currentTime);
             }
-            // 如果沒停靠 → 跳過（只計算通過時間）
         }
     }
 }
