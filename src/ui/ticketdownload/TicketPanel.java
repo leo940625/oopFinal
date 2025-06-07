@@ -1,11 +1,19 @@
-//package MovieBooking.help;
 package ui.ticketdownload;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.*;
 import java.awt.geom.*;
+import dao.TrainDAO;
+import dao.TrainDAOImpl;
+import util.DBConnection;
 
 public class TicketPanel extends JPanel {
+    private int trainId;
+    private String fromStation;
+    private String toStation;
+    private String departureTime;
+    private String arrivalTime;
 
     private final int PANEL_WIDTH = 400;
     private final int PANEL_HEIGHT = 200;
@@ -13,58 +21,54 @@ public class TicketPanel extends JPanel {
     private final int SIDE_RADIUS = 12;
     private final int SIDE_COUNT = 3;
 
-    public TicketPanel() {
-        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        setOpaque(false);
+    public TicketPanel(int trainId, String fromStation, String toStation) {
+        this.trainId = trainId;
+        this.fromStation = fromStation;
+        this.toStation = toStation;
+
+        loadTrainData();  // <-- 從 TrainDAO 拿 Train 物件，再取時間
+        setPreferredSize(new Dimension(600, 200));
+        setBackground(Color.WHITE);
+    }
+
+    private void loadTrainData() {
+        try (Connection conn = DBConnection.getConnection()) {
+            TrainDAO trainDAO = new TrainDAOImpl(conn);
+            Train train = trainDAO.getTrainByNumber(trainId);
+
+            // 根據 fromStation 與 toStation 比對，取得時間
+            this.departureTime = train.getTimeByStation(fromStation); // 自訂方法
+            this.arrivalTime = train.getTimeByStation(toStation);     // 自訂方法
+        } catch (SQLException e) {
+            e.printStackTrace();
+            this.departureTime = "??:??";
+            this.arrivalTime = "??:??";
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Area ticketArea = new Area(new Rectangle2D.Double(0, 0, PANEL_WIDTH, PANEL_HEIGHT));
+        // 畫左邊藍色區塊
+        g.setColor(new Color(100, 149, 237)); // 淺藍色
+        g.fillRect(0, 0, 100, getHeight());
 
-        int r = CORNER_RADIUS;
-        int d = r * 2;
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("SansSerif", Font.BOLD, 20));
+        g.drawString("車票", 25, 40);
+        g.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        g.drawString("Ticket", 25, 65);
 
-        // Subtract corner circles
-        ticketArea.subtract(new Area(new Ellipse2D.Double(-r, -r, d, d))); // Top-left
-        ticketArea.subtract(new Area(new Ellipse2D.Double(PANEL_WIDTH - r, -r, d, d))); // Top-right
-        ticketArea.subtract(new Area(new Ellipse2D.Double(-r, PANEL_HEIGHT - r, d, d))); // Bottom-left
-        ticketArea.subtract(new Area(new Ellipse2D.Double(PANEL_WIDTH - r, PANEL_HEIGHT - r, d, d))); // Bottom-right
+        // 主要白色區塊
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("SansSerif", Font.BOLD, 18));
+        g.drawString("車次：" + trainId, 120, 40);
+        g.drawString(fromStation + " → " + toStation, 120, 75);
 
-        int sr = SIDE_RADIUS;
-        int sd = sr * 2;
-        int baseY = 60;
-        int spacing = 40;
+        g.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        g.drawString("出發時間：" + departureTime, 120, 110);
+        g.drawString("抵達時間：" + arrivalTime, 120, 140);
 
-        for (int i = 0; i < SIDE_COUNT; i++) {
-            int y = baseY + i * spacing;
-            ticketArea.subtract(new Area(new Ellipse2D.Double(-sr, y - sr, sd, sd)));
-            ticketArea.subtract(new Area(new Ellipse2D.Double(PANEL_WIDTH - sr, y - sr, sd, sd)));
-        }
-
-        g2.setColor(Color.WHITE);
-        g2.fill(ticketArea);
-
-        g2.setColor(Color.BLACK);
-        g2.setStroke(new BasicStroke(2));
-        g2.draw(ticketArea);
-
-        g2.dispose();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Ticket Preview");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(600, 400);
-            frame.setLayout(new FlowLayout(FlowLayout.CENTER, 80, 80));
-            frame.add(new TicketPanel());
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
     }
 }

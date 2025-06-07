@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 import ui.HomeFrame;
+import ui.ticketdownload.TicketPanel;
 
 /**
  * 顯示車票
@@ -31,7 +32,7 @@ public class TicketPreviewFrame extends JFrame {
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.setBackground(Color.WHITE);
 
-        TicketPanel ticketPanel = new TicketPanel();
+        TicketPanel ticketPanel = new TicketPanel(trainNumber, departureStation, arrivalStation, departureTime, arrivalTime);
         contentPane.add(ticketPanel, BorderLayout.CENTER);
 
         JButton homeButton = new JButton("回首頁");

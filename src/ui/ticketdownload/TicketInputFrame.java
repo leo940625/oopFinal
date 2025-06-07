@@ -222,7 +222,6 @@ public class TicketInputFrame extends JFrame {
         return button;
     }
 
-    // TODO: 跟資料庫確認輸入的火車班次是不是確實有停輸入的兩個車站
 
     private String[] getAllStations() {
         return new String[]{"南港", "台北", "板橋", "桃園", "新竹", "苗栗", "台中", "彰化", "雲林", "嘉義", "台南", "左營"};
