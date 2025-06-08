@@ -36,7 +36,7 @@ public class TicketPanel extends JPanel {
         setBackground(Color.WHITE);
     }
 
-    /* TODO:資料庫版本
+    //
     private void loadTrainData() {
         try (Connection conn = DBConnection.getConnection()) {
             TrainDAO trainDAO = new TrainDAOImpl(conn);
@@ -68,7 +68,8 @@ public class TicketPanel extends JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "無法載入車票資訊：" + e.getMessage(), "錯誤", JOptionPane.ERROR_MESSAGE);
         }
-    }*/
+    }
+    /*
     // 測試ui
     private void loadTrainData() {
         // 🧪 假資料模式
@@ -86,7 +87,7 @@ public class TicketPanel extends JPanel {
             this.departureTime = "??:??";
             this.arrivalTime = "??:??";
         }
-    }
+    }*/
 
     private void loadQRCodeImage() {
         try {
