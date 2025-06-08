@@ -45,18 +45,24 @@
 │   │   │   ├── TicketPreviewFrame.java
 │   │   │   └── TicketPanel.java
 │   │   │
-│   │   ├── searchtrain/                 ← 列車查詢模組
-│   │   │   ├── TrainSearchSFrame.java   ← 用起訖車站查詢
-│   │   │   ├── TrainInformationFrame.java ← 用起訖車站查詢的結果顯示
-│   │   │   ├── TrainSearchIDFrame.java  ← 用車次查詢模組
-│   │   │   └── TrainDetailFrame.java    ← 用車次查詢模組的結果顯示
+│   │   ├── searchtrain/                     ← 列車查詢模組
+│   │   │   ├── TrainSearchChoiceFrame.java  ← 選擇要用哪種查詢方式
+│   │   │   ├── TrainSearchSFrame.java       ← 用起訖車站查詢
+│   │   │   ├── TrainInformationFrame.java   ← 用起訖車站查詢的結果顯示
+│   │   │   ├── TrainSearchIDFrame.java      ← 用車次查詢模組
+│   │   │   └── TrainDetailFrame.java        ← 用車次查詢模組的結果顯示
 │   │   │
 │   │   ├── contact/                     ← 聯絡資訊模組
+│   │   │   └── ContactFrame.java 
 │   │   │
 │   │   ├── HomeFrame.java               ← 主畫面
 │   │   ├── BackgroundPanel.java         ← 共用背景面板
 │   │   ├── GradientPanel.java           ← 共用漸層面板
 │   │   └── BannerPanel.java             ← 封面圖片設計
+│   │
+│   ├── fonts/                           ← 儲存字體
+│   │ 
+│   ├── resources/                       ← UI 所需圖片資源（背景圖）
 │
 │   ├── controller/                      ← 控制邏輯層（MVC 中 C）
 │   │   └── TrainController.java
@@ -81,7 +87,7 @@
 │   │   ├── ButtonUtil.java              ← 按鈕一致風格
 │   │   ├── FontUtil.java                ← 字體資源
 │   │   ├── TrainUtils.java
-│       └── DBConnection.java
+│   │   └── DBConnection.java
 │
 ├── data/                                ← 外部靜態資料（如匯入匯出用）
 │   └── trains.csv                       ← 列車初始資料（可選）
@@ -89,7 +95,6 @@
 ├── db/                                  ← SQL 建表與初始化資料
 │   └── schema.sql                       ← 建立資料表與預設資料
 │
-├── resources/                           ← UI 所需圖片資源（logo、背景圖等）
 │
 └── README.md                            ← 專案說明文件
 ```
