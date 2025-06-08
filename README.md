@@ -56,7 +56,7 @@
 │   │   ├── HomeFrame.java               ← 主畫面
 │   │   ├── BackgroundPanel.java         ← 共用背景面板
 │   │   ├── GradientPanel.java           ← 共用漸層面板
-│   │   └── BannerPanel.java         ← 封面圖片設計
+│   │   └── BannerPanel.java             ← 封面圖片設計
 │
 │   ├── controller/                      ← 控制邏輯層（MVC 中 C）
 │   │   └── TrainController.java
@@ -78,6 +78,9 @@
 │   │   └── GUI.java                     ← Swing GUI 簡化入口（可選）
 │
 │   └── utils/                           ← 工具與公用元件
+│   │   ├── ButtonUtil.java              ← 按鈕一致風格
+│   │   ├── FontUtil.java                ← 字體資源
+│   │   ├── TrainUtils.java
 │       └── DBConnection.java
 │
 ├── data/                                ← 外部靜態資料（如匯入匯出用）
