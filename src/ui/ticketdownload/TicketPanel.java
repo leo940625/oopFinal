@@ -5,8 +5,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.sql.*;
 import java.net.URL;
+import java.awt.geom.*;
+import java.sql.*;
 import dao.TrainDAO;
 import dao.TrainDAOImpl;
 import model.*;
@@ -22,11 +23,13 @@ public class TicketPanel extends JPanel {
     private String arrivalTime;
     private BufferedImage qrImage;
 
+    private static final int CORNER_RADIUS = 30;
+    private static final int SIDE_RADIUS = 18;
+
     public TicketPanel(int trainId, String fromStation, String toStation) {
         this.trainId = trainId;
         this.fromStation = fromStation;
         this.toStation = toStation;
-
         loadTrainData();  // <-- 從 TrainDAO 拿 Train 物件，再取時間
         loadQRCodeImage(); // 載入 QR Code 圖片
         //setPreferredSize(new Dimension(800, 150));
@@ -82,7 +85,6 @@ public class TicketPanel extends JPanel {
             // 找不到匹配 → 給錯誤提示
             this.departureTime = "??:??";
             this.arrivalTime = "??:??";
-            System.out.println("[WARN] 無對應假資料，請確認車次與站名是否輸入正確");
         }
     }
 
@@ -104,45 +106,74 @@ public class TicketPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
+        Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        // 左側粉色區塊
-        // g.setColor(new Color(255, 228, 225)); // 淺粉色
-        g2.setColor(new Color(255, 192, 203)); // 粉紅
-        g2.fillRect(0, 0, 150, getHeight());
 
+        int width = getWidth();
+        int height = getHeight();
+
+        // Draw ticket shape
+        Area ticket = new Area(new Rectangle2D.Double(0, 0, width, height));
+        int r = CORNER_RADIUS, d = r * 2;
+        ticket.subtract(new Area(new Ellipse2D.Double(-r, -r, d, d)));
+        ticket.subtract(new Area(new Ellipse2D.Double(width - r, -r, d, d)));
+        ticket.subtract(new Area(new Ellipse2D.Double(-r, height - r, d, d)));
+        ticket.subtract(new Area(new Ellipse2D.Double(width - r, height - r, d, d)));
+
+        int count  = (height - 60) / (50 + 36); // 用count算拉長的話要多少個半圓
+        int sr = SIDE_RADIUS, sd = sr * 2, baseY = 62, spacing = 50;
+        for (int i = 0; i < 4; i++) {
+            int y = baseY + i * spacing;
+            ticket.subtract(new Area(new Ellipse2D.Double(-sr, y - sr, sd, sd)));
+            ticket.subtract(new Area(new Ellipse2D.Double(width - sr, y - sr, sd, sd)));
+        }
+
+        // 填白底
+        g2.setColor(Color.WHITE);
+        g2.fill(ticket);
+
+        // 畫外框
+        g2.setColor(Color.BLACK);
+        g2.setStroke(new BasicStroke(3));
+        g2.draw(ticket);
+
+        // 畫左側粉紅塊
+        Shape oldClip = g2.getClip();
+        g2.setClip(ticket);
+        g2.setColor(new Color(255, 192, 203));
+        g2.fillRect(2, 2, 150, height-4);
+        g2.setClip(oldClip);
+
+        // 左上文字
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("SansSerif", Font.BOLD, 20));
-        g2.drawString("車票", 50, 40);
+        g2.drawString("車票", 60, 50);
         g2.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        g2.drawString("Ticket", 50, 65);
+        g2.drawString("Ticket", 60, 75);
 
-        // 中間主要白色區塊（文字）
+        // 主區內容
         g2.setColor(Color.BLACK);
         g2.setFont(new Font("SansSerif", Font.BOLD, 18));
-        g2.drawString("車次 " + trainId, 260, 55); // 120->200
+        g2.drawString("車次 " + trainId, 260, 55);
         g2.drawString(fromStation + "      →      " + toStation, 220, 120);
-
-        g2.setFont(new Font("SansSerif", Font.BOLD, 14)); // TODO:調整一下
+        g2.setFont(new Font("SansSerif", Font.BOLD, 14));
         g2.drawString(departureTime + "                 " + arrivalTime, 220, 150);
 
-        // 垂直虛線
-        Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
-                0, new float[]{5}, 0);
-        g2.setStroke(dashed);
+        // 畫虛線
+        g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{5}, 0));
         g2.setColor(Color.GRAY);
-        g2.drawLine(480, 20, 480, getHeight() - 20);
+        g2.drawLine(475, 20, 475, height - 20);
 
-        // 更多資訊 + QRCode 區域
-        g2.setColor(Color.BLACK);
+        // 更多資訊
         g2.setFont(new Font("SansSerif", Font.BOLD, 18));
-        g2.drawString("更多資訊", 560, 65);
+        g2.setColor(Color.BLACK);
+        g2.drawString("更多資訊", 550, 65);
 
+        // 畫 QR code
         if (qrImage != null) {
-            g2.drawImage(qrImage, 550, 90, 100, 100, this);
-        } else {
-            g2.drawRect(550, 70, 60, 60);
-            g2.drawString("[QR]", 570, 85);
+            int qrSize = 100;
+            g2.drawImage(qrImage, 535, 90, qrSize, qrSize, this);
         }
+        g2.dispose();
     }
 }

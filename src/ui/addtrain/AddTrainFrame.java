@@ -27,20 +27,6 @@ public class AddTrainFrame extends JFrame {
     private JTextField trainIdField;
 
     /**
-     * 檢查用戶是否已登錄，若已登錄則打開新增車次窗口，否則顯示錯誤提示。
-     *
-     * @param parent     父組件，用於顯示錯誤提示對話框
-     * @param isLoggedIn 用戶是否已登錄的標誌
-     */
-    public static void openIfAuthenticated(Component parent, boolean isLoggedIn) {
-        if (isLoggedIn) {
-            new AddTrainFrame().setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(parent, "請先登入員工帳號才能新增車次！", "權限不足", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    /**
      * 構造函數，初始化新增車次窗口的圖形界面。
      * 設置窗口標題、大小、佈局，並添加方向選擇、車次編號輸入、出發時間輸入和停靠車站勾選等組件。
      */
@@ -62,7 +48,7 @@ public class AddTrainFrame extends JFrame {
         title.setFont(new Font("SansSerif", Font.BOLD, 25));
         title.setForeground(Color.BLACK);
 
-        // 用 BoxLayout 的 JPanel 讓 title 真正水平置中
+        // 用 BoxLayout 的 JPanel 讓 title 水平置中
         JPanel titlePanel = new JPanel();
         titlePanel.setOpaque(false);
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
@@ -71,45 +57,10 @@ public class AddTrainFrame extends JFrame {
         titlePanel.add(title);
         titlePanel.add(Box.createHorizontalGlue());
 
-        // ✕ 按鈕
-        JButton closeButton = new JButton("✕");
-        closeButton.setPreferredSize(new Dimension(40, 30));
-        closeButton.setFocusPainted(false);
-        closeButton.setBackground(new Color(255, 182, 193));
-        closeButton.setForeground(Color.BLACK);
-        closeButton.setFont(new Font("SansSerif", Font.BOLD, 16));
-        closeButton.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        closeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        closeButton.setContentAreaFilled(true);
-        closeButton.setOpaque(true);
-
-        // 滑鼠移入hover
-        closeButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                closeButton.setBackground(new Color(255, 105, 180));
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                closeButton.setBackground(new Color(255, 182, 193));
-            }
-        });
-
-        // 點擊返回首頁
-        closeButton.addActionListener(e -> {
-            new HomeFrame();
-            dispose();
-        });
-
-        // 右上角的 FlowPanel（只放叉叉）
-        JPanel rightTopPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        rightTopPanel.setOpaque(false);
-        rightTopPanel.add(closeButton);
-
-        // 將標題與右上角叉叉一起放入 topPanel
+        // 將標題放入topPanel
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
         topPanel.add(titlePanel, BorderLayout.CENTER);
-        topPanel.add(rightTopPanel, BorderLayout.EAST);
         contentPane.add(topPanel, BorderLayout.NORTH);
 
         // 方向選單
@@ -162,7 +113,7 @@ public class AddTrainFrame extends JFrame {
         formPanel.add(Box.createVerticalStrut(5));
 
         // 勾選車站
-        JPanel stationOuterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 30, 10));
+        JPanel stationOuterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 25, 10));
         stationOuterPanel.setOpaque(false);
 
         String[] stationNames = {"南港", "台北", "板橋", "桃園", "新竹", "苗栗",
@@ -184,16 +135,30 @@ public class AddTrainFrame extends JFrame {
         spacer.setOpaque(false);
         formPanel.add(spacer);
 
-        // 送出按鈕
-        JPanel submitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        submitPanel.setOpaque(false);
+        // 按鈕列
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+        buttonPanel.setOpaque(false);
 
         JButton submitButton = createStyledButton("送出");
-        submitButton.setPreferredSize(new Dimension(200, 40));
+        submitButton.setPreferredSize(new Dimension(120, 40));
         submitButton.addActionListener(e -> handleSubmit());
-        submitPanel.add(submitButton);
+
+        JButton homeButton = createStyledButton("退出");
+        homeButton.setPreferredSize(new Dimension(120, 40));
+        homeButton.addActionListener(e -> {
+            dispose();
+            new HomeFrame();
+        });
+
+        buttonPanel.add(Box.createHorizontalGlue());
+        buttonPanel.add(submitButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(30, 0)));
+        buttonPanel.add(homeButton);
+        buttonPanel.add(Box.createHorizontalGlue());
+
         formPanel.add(Box.createVerticalStrut(20));
-        formPanel.add(submitPanel);
+        formPanel.add(buttonPanel);
 
         contentPane.add(formPanel, BorderLayout.CENTER);
         contentPane.setBorder(BorderFactory.createEmptyBorder(30, 40, 20, 40));

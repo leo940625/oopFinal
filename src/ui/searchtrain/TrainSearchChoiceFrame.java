@@ -6,6 +6,7 @@ import java.awt.*;
 import ui.BackgroundPanel;
 import ui.HomeFrame;
 import ui.addtrain.login.EmployeeLoginFrame;
+import util.ButtonUtil;
 
 /**
  * 選擇「列車查詢」後要先選擇查詢的方法（用車次號碼查還是用起始終點車站）
@@ -70,7 +71,38 @@ public class TrainSearchChoiceFrame extends JFrame{
         buttonPanel.add(Box.createHorizontalGlue());
 
         centerPanel.add(buttonPanel, BorderLayout.CENTER);
-        contentPane.add(centerPanel);
+
+        GridBagConstraints gbcCenter = new GridBagConstraints();
+        gbcCenter.gridx = 0;
+        gbcCenter.gridy = 0;
+        gbcCenter.weighty = 0; // 不佔空間
+        gbcCenter.insets = new Insets(150, 0, 0, 0); // 與底下的回首頁留距
+        //gbcCenter.anchor = GridBagConstraints.CENTER;
+        gbcCenter.anchor = GridBagConstraints.NORTH;
+        contentPane.add(centerPanel, gbcCenter);
+
+        // ---- 底部的「回首頁」粉紅按鈕 ----
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setOpaque(false);
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        JButton homeButton = ButtonUtil.createStyledButton("回首頁");
+        homeButton.setPreferredSize(new Dimension(150, 45)); // 你可以再調整大小
+        homeButton.addActionListener(e -> {
+            dispose();
+            new HomeFrame().setVisible(true);
+        });
+        bottomPanel.add(homeButton);
+
+        // --- 設定靠近最下方 ---
+        GridBagConstraints gbcBottom = new GridBagConstraints();
+        gbcBottom.gridx = 0;
+        gbcBottom.gridy = 1;
+        gbcBottom.weighty = 1.0; // 向下推到底
+        gbcBottom.anchor = GridBagConstraints.SOUTH;
+        gbcBottom.insets = new Insets(20, 0, 30, 0); // 與底部邊界留距
+        contentPane.add(bottomPanel, gbcBottom);
+
         setVisible(true);
     }
 

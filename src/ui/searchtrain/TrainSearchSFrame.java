@@ -7,6 +7,7 @@ import dao.TrainDAOImpl;
 import model.Train;
 import ui.HomeFrame;
 import util.DBConnection;
+import util.ButtonUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +43,7 @@ public class TrainSearchSFrame extends JFrame {
         title.setForeground(Color.BLACK);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         formPanel.add(Box.createVerticalStrut(30));
-        // formPanel.add(Box.createVerticalGlue());  // 這行可以將空間頂部推開 根據空間考慮要俵
+        // formPanel.add(Box.createVerticalGlue());  // 這行可以將空間頂部推開 根據空間考慮要不要
         formPanel.add(title);
         formPanel.add(Box.createVerticalStrut(30));
 
@@ -61,9 +62,14 @@ public class TrainSearchSFrame extends JFrame {
         formPanel.add(labeledRow("抵達站", endStationBox));
         formPanel.add(Box.createVerticalStrut(30));
 
-        JButton searchButton = new JButton("查詢");
-        styleButton(searchButton);
-        searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // 按鈕列
+        JPanel buttonRow = new JPanel();
+        buttonRow.setLayout(new BoxLayout(buttonRow, BoxLayout.X_AXIS));
+        buttonRow.setOpaque(false);
+
+        JButton searchButton = ButtonUtil.createStyledButton("查詢");
+        searchButton.setPreferredSize(new Dimension(120, 40));
+        searchButton.setMaximumSize(new Dimension(120, 40));
         searchButton.addActionListener(e -> {
             String from = (String) startStationBox.getSelectedItem();
             String to = (String) endStationBox.getSelectedItem();
@@ -79,8 +85,6 @@ public class TrainSearchSFrame extends JFrame {
                 TrainDAO trainDAO = new TrainDAOImpl(conn);
                 StationDAO stationDAO = new StationDAOImpl(conn);
 
-                // findTrainsBetween找起訖站對應的車次們
-                //  result 就是符合我起訖站的車次們, from是出發車站，to是抵達車站（型別是string 67、68行）
                 List<Train> result = trainDAO.findTrainsBetween(stationDAO.getStationByName(from),stationDAO.getStationByName(to),null);
 
                 if (result.isEmpty()) {
@@ -131,10 +135,23 @@ public class TrainSearchSFrame extends JFrame {
                     new HomeFrame().setVisible(true); // 回首頁
                 }
                 // 若選擇重新查詢（YES_OPTION），就什麼都不做
-            } // 資料庫暫時註解掉
+            }
+        });
+        JButton exitButton = ButtonUtil.createStyledButton("退出");
+        exitButton.setPreferredSize(new Dimension(120, 40));
+        exitButton.setMaximumSize(new Dimension(120, 40));
+        exitButton.addActionListener(e -> {
+            dispose();
+            new TrainSearchChoiceFrame().setVisible(true);
         });
 
-        formPanel.add(searchButton);
+        buttonRow.add(Box.createHorizontalGlue());
+        buttonRow.add(searchButton);
+        buttonRow.add(Box.createRigidArea(new Dimension(30, 0)));
+        buttonRow.add(exitButton);
+        buttonRow.add(Box.createHorizontalGlue());
+
+        formPanel.add(buttonRow);
         formPanel.add(Box.createVerticalGlue());  // 空間底部推開 查詢就不會擠在最下面
 
         contentPane.add(formPanel, BorderLayout.CENTER);

@@ -34,35 +34,61 @@ public class EmployeeLoginFrame extends JFrame {
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         loginPanel.add(titleLabel);
-
         loginPanel.add(Box.createVerticalStrut(20));
 
         // 帳號
+        JPanel userRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        userRow.setOpaque(false);
+        JLabel userLabel = new JLabel("帳號：");
+        userLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
         usernameField = new JTextField(15);
-        usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         usernameField.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        loginPanel.add(new JLabel("帳號："));
-        loginPanel.add(usernameField);
-
+        userRow.add(userLabel);
+        userRow.add(usernameField);
+        loginPanel.add(userRow);
         loginPanel.add(Box.createVerticalStrut(15));
 
         // 密碼
+        JPanel passRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        passRow.setOpaque(false);
+        JLabel passLabel = new JLabel("密碼：");
+        passLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
         passwordField = new JPasswordField(15);
-        passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         passwordField.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        loginPanel.add(new JLabel("密碼："));
-        loginPanel.add(passwordField);
-
+        passRow.add(passLabel);
+        passRow.add(passwordField);
+        loginPanel.add(passRow);
         loginPanel.add(Box.createVerticalStrut(20));
 
-        // 登入按鈕
+        // 登入+退出按鈕
+        JPanel buttonRow = new JPanel();
+        buttonRow.setLayout(new BoxLayout(buttonRow, BoxLayout.X_AXIS));
+        buttonRow.setOpaque(false);
+
         JButton loginButton = createStyledButton("登入");
-        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        //loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loginButton.setPreferredSize(new Dimension(100, 40));
+        loginButton.setMaximumSize(new Dimension(100, 40));
         loginButton.addActionListener(e -> handleLogin());
-        loginPanel.add(loginButton);
+
+        JButton exitButton = createStyledButton("退出");
+        exitButton.setPreferredSize(new Dimension(100, 40));
+        exitButton.setMaximumSize(new Dimension(100, 40));
+        exitButton.addActionListener(e -> {
+            dispose();
+            new ui.HomeFrame();
+        });
+
+        buttonRow.add(Box.createHorizontalGlue());
+        buttonRow.add(loginButton);
+        buttonRow.add(Box.createRigidArea(new Dimension(25, 0))); // 按鈕之間距離
+        buttonRow.add(exitButton);
+        buttonRow.add(Box.createHorizontalGlue());
+        loginPanel.add(buttonRow);
 
         contentPane.add(loginPanel);
         setVisible(true);
+
     }
 
     private void handleLogin() {

@@ -4,6 +4,7 @@ import dao.TrainDAO;
 import dao.TrainDAOImpl;
 import model.Train;
 import ui.GradientPanel;
+import util.ButtonUtil;
 import util.DBConnection;
 
 import javax.swing.*;
@@ -53,9 +54,15 @@ public class TrainSearchIDFrame extends JFrame {
         formPanel.add(Box.createVerticalStrut(30));
 
         // 查詢按鈕
-        JButton searchButton = new JButton("查詢");
-        styleButton(searchButton);
-        searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JPanel buttonRow = new JPanel();
+        buttonRow.setLayout(new BoxLayout(buttonRow, BoxLayout.X_AXIS));
+        buttonRow.setOpaque(false);
+
+        JButton searchButton = ButtonUtil.createStyledButton("查詢");
+        searchButton.setPreferredSize(new Dimension(120, 40));
+        searchButton.setMaximumSize(new Dimension(120, 40));
+
         formPanel.add(Box.createVerticalGlue()); // 「查詢」上方彈性空間
         formPanel.add(searchButton);
         formPanel.add(Box.createVerticalGlue()); // 底部彈性空間
@@ -77,7 +84,6 @@ public class TrainSearchIDFrame extends JFrame {
             try (Connection conn = DBConnection.getConnection()){
                 TrainDAO dao = new TrainDAOImpl(conn);
                 Train train = dao.getTrainByNumber(trainNumber);
-                // TODO: 已確認，沒意外會是對的呼叫
 
                 // 資料不存在提示
                 if (train == null) {
@@ -94,6 +100,23 @@ public class TrainSearchIDFrame extends JFrame {
                         "錯誤", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        JButton exitButton = ButtonUtil.createStyledButton("退出");
+        exitButton.setPreferredSize(new Dimension(120, 40));
+        exitButton.setMaximumSize(new Dimension(120, 40));
+        exitButton.addActionListener(e -> {
+            dispose();
+            new TrainSearchChoiceFrame().setVisible(true);
+        });
+
+        buttonRow.add(Box.createHorizontalGlue());
+        buttonRow.add(searchButton);
+        buttonRow.add(Box.createRigidArea(new Dimension(30, 0)));
+        buttonRow.add(exitButton);
+        buttonRow.add(Box.createHorizontalGlue());
+
+        formPanel.add(buttonRow);
+        formPanel.add(Box.createVerticalGlue());
 
         setVisible(true); // 顯示視窗
     }
