@@ -43,8 +43,7 @@
 │   │   │
 │   │   ├── ticketdownload/              ← 票務下載模組
 │   │   │   ├── TicketPreviewFrame.java
-│   │   │   ├── TicketPanel.java
-│   │   │   └── TicketInputFrame.java
+│   │   │   └── TicketPanel.java
 │   │   │
 │   │   ├── searchtrain/                 ← 列車查詢模組
 │   │   │   ├── TrainSearchSFrame.java   ← 用起訖車站查詢
