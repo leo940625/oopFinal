@@ -3,10 +3,12 @@ package ui.ticketdownload;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
-import java.awt.geom.*;
 import dao.TrainDAO;
 import dao.TrainDAOImpl;
+import model.*;
 import util.DBConnection;
+import util.TrainUtils;
+import dao.*;
 
 public class TicketPanel extends JPanel {
     private int trainId;
@@ -34,15 +36,33 @@ public class TicketPanel extends JPanel {
     private void loadTrainData() {
         try (Connection conn = DBConnection.getConnection()) {
             TrainDAO trainDAO = new TrainDAOImpl(conn);
-            Train train = trainDAO.getTrainByNumber(trainId);
+            StationDAO stationDAO = new StationDAOImpl(conn);
+            TrainUtils trainUtils = new TrainUtils();
 
-            // 根據 fromStation 與 toStation 比對，取得時間
-            this.departureTime = train.getTimeByStation(fromStation); // 自訂方法
-            this.arrivalTime = train.getTimeByStation(toStation);     // 自訂方法
+            Train train = trainDAO.getTrainByNumber(trainId);
+            Station from = stationDAO.getStationByName(fromStation);
+            Station to = stationDAO.getStationByName(toStation);
+
+            if (train == null || from == null || to == null) {
+                throw new IllegalArgumentException("傳入的車次或站點無效。");
+            }
+
+            StopTime[] stops = trainUtils.findDepartureAndArrivalStops(train, from, to);
+            StopTime departureStop = stops[0];
+            StopTime arrivalStop = stops[1];
+
+            if (departureStop == null || arrivalStop == null
+                    || departureStop.getDepartureTime() == null
+                    || arrivalStop.getArrivalTime() == null) {
+                throw new IllegalStateException("找不到停靠時間，請檢查車次資料是否完整。");
+            }
+
+            this.departureTime = departureStop.getDepartureTime().toString();
+            this.arrivalTime = arrivalStop.getArrivalTime().toString();
+
         } catch (SQLException e) {
             e.printStackTrace();
-            this.departureTime = "??:??";
-            this.arrivalTime = "??:??";
+            JOptionPane.showMessageDialog(this, "無法載入車票資訊：" + e.getMessage(), "錯誤", JOptionPane.ERROR_MESSAGE);
         }
     }
 

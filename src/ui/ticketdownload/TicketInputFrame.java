@@ -144,7 +144,7 @@ public class TicketInputFrame extends JFrame {
                 return;
             }
 
-            // 解析車次編號
+            // 取得資訊
             int trainId = Integer.parseInt(trainNumber);
 
             // 查詢車次和站點
@@ -181,12 +181,13 @@ public class TicketInputFrame extends JFrame {
                 return;
             }
 
-            // 取得時間
-            String departureTime = departureStop.getDepartureTime().toString();
-            String arrivalTime = arrivalStop.getArrivalTime().toString();
-
-            // 開啟預覽視窗並關閉當前視窗
-            new TicketPreviewFrame(departureStationName, arrivalStationName, departureTime, arrivalTime, trainNumber);
+            // 彈出新視窗顯示 TicketPanel
+            JFrame previewFrame = new JFrame("預覽車票");
+            previewFrame.setSize(700, 300);
+            previewFrame.setLocationRelativeTo(null);
+            previewFrame.add(new TicketPanel(trainId, departureStationName, arrivalStationName));
+            previewFrame.setVisible(true);
+            // TODO:考慮一下要不要關
             dispose();
 
         } catch (SQLException e) {
