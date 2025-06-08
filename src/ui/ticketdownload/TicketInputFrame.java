@@ -125,6 +125,7 @@ public class TicketInputFrame extends JFrame {
         setVisible(true);
     }
 
+    /* TODO:資料庫版本
     private void handlePreview() {
         try (Connection conn = DBConnection.getConnection()) {
             // 初始化 DAO，確保一致性
@@ -187,12 +188,40 @@ public class TicketInputFrame extends JFrame {
             previewFrame.setLocationRelativeTo(null);
             previewFrame.add(new TicketPanel(trainId, departureStationName, arrivalStationName));
             previewFrame.setVisible(true);
-            // TODO:考慮一下要不要關
-            dispose();
+            // TODO:考慮一下要不要關: 先不關
+            // dispose();
 
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "資料庫錯誤：" + e.getMessage(), "錯誤", JOptionPane.ERROR_MESSAGE);
+        }
+    }*/
+    // 測試ui版本
+    private void handlePreview() {
+        // 🧪 假資料模式：不連資料庫
+        String trainNumber = trainNumberField.getText().trim();
+        String departureStationName = (String) departureBox.getSelectedItem();
+        String arrivalStationName = (String) arrivalBox.getSelectedItem();
+
+        if (!trainNumber.matches("\\d{4}")) {
+            JOptionPane.showMessageDialog(this, "請輸入 4 位數字作為車次編號！", "錯誤", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int trainId = Integer.parseInt(trainNumber);
+
+        // 你可以假設只允許以下搭配
+        if ((trainId == 1234 && departureStationName.equals("台中") && arrivalStationName.equals("台南")) ||
+                (trainId == 5678 && departureStationName.equals("台北") && arrivalStationName.equals("台中"))) {
+
+            JFrame previewFrame = new JFrame("預覽車票");
+            previewFrame.setSize(700, 300);
+            previewFrame.setLocationRelativeTo(null);
+            previewFrame.add(new TicketPanel(trainId, departureStationName, arrivalStationName));
+            previewFrame.setVisible(true);
+
+        } else {
+            JOptionPane.showMessageDialog(this, "查無此車次與起訖站搭配（假資料模式）", "錯誤", JOptionPane.ERROR_MESSAGE);
         }
     }
 

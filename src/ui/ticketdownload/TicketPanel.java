@@ -1,8 +1,12 @@
 package ui.ticketdownload;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.*;
+import java.net.URL;
 import dao.TrainDAO;
 import dao.TrainDAOImpl;
 import model.*;
@@ -16,12 +20,7 @@ public class TicketPanel extends JPanel {
     private String toStation;
     private String departureTime;
     private String arrivalTime;
-
-    private final int PANEL_WIDTH = 400;
-    private final int PANEL_HEIGHT = 200;
-    private final int CORNER_RADIUS = 30;
-    private final int SIDE_RADIUS = 12;
-    private final int SIDE_COUNT = 3;
+    private BufferedImage qrImage;
 
     public TicketPanel(int trainId, String fromStation, String toStation) {
         this.trainId = trainId;
@@ -29,10 +28,12 @@ public class TicketPanel extends JPanel {
         this.toStation = toStation;
 
         loadTrainData();  // <-- 從 TrainDAO 拿 Train 物件，再取時間
-        setPreferredSize(new Dimension(600, 200));
+        loadQRCodeImage(); // 載入 QR Code 圖片
+        //setPreferredSize(new Dimension(800, 150));
         setBackground(Color.WHITE);
     }
 
+    /* TODO:資料庫版本
     private void loadTrainData() {
         try (Connection conn = DBConnection.getConnection()) {
             TrainDAO trainDAO = new TrainDAOImpl(conn);
@@ -64,31 +65,84 @@ public class TicketPanel extends JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "無法載入車票資訊：" + e.getMessage(), "錯誤", JOptionPane.ERROR_MESSAGE);
         }
+    }*/
+    // 測試ui
+    private void loadTrainData() {
+        // 🧪 假資料模式
+        // System.out.println("[DEBUG] 使用假資料載入車票時間");
+
+        // 根據車次與站名給固定時間
+        if (trainId == 1234 && fromStation.equals("台中") && toStation.equals("台南")) {
+            this.departureTime = "09:12";
+            this.arrivalTime = "10:28";
+        } else if (trainId == 5678 && fromStation.equals("台北") && toStation.equals("台中")) {
+            this.departureTime = "07:00";
+            this.arrivalTime = "08:45";
+        } else {
+            // 找不到匹配 → 給錯誤提示
+            this.departureTime = "??:??";
+            this.arrivalTime = "??:??";
+            System.out.println("[WARN] 無對應假資料，請確認車次與站名是否輸入正確");
+        }
+    }
+
+    private void loadQRCodeImage() {
+        try {
+            URL url = getClass().getResource("/resources/qr-code.png");
+            if (url != null) {
+                qrImage = ImageIO.read(url);
+            } else {
+                System.out.println("[WARN] 找不到 QRCode 資源");
+                qrImage = null;
+            }
+        } catch (IOException e) {
+            qrImage = null;
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        // 左側粉色區塊
+        // g.setColor(new Color(255, 228, 225)); // 淺粉色
+        g2.setColor(new Color(255, 192, 203)); // 粉紅
+        g2.fillRect(0, 0, 150, getHeight());
 
-        // 畫左邊藍色區塊
-        g.setColor(new Color(100, 149, 237)); // 淺藍色
-        g.fillRect(0, 0, 100, getHeight());
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("SansSerif", Font.BOLD, 20));
+        g2.drawString("車票", 50, 40);
+        g2.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        g2.drawString("Ticket", 50, 65);
 
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("SansSerif", Font.BOLD, 20));
-        g.drawString("車票", 25, 40);
-        g.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        g.drawString("Ticket", 25, 65);
+        // 中間主要白色區塊（文字）
+        g2.setColor(Color.BLACK);
+        g2.setFont(new Font("SansSerif", Font.BOLD, 18));
+        g2.drawString("車次 " + trainId, 260, 55); // 120->200
+        g2.drawString(fromStation + "      →      " + toStation, 220, 120);
 
-        // 主要白色區塊
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("SansSerif", Font.BOLD, 18));
-        g.drawString("車次：" + trainId, 120, 40);
-        g.drawString(fromStation + " → " + toStation, 120, 75);
+        g2.setFont(new Font("SansSerif", Font.BOLD, 14)); // TODO:調整一下
+        g2.drawString(departureTime + "                 " + arrivalTime, 220, 150);
 
-        g.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        g.drawString("出發時間：" + departureTime, 120, 110);
-        g.drawString("抵達時間：" + arrivalTime, 120, 140);
+        // 垂直虛線
+        Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL,
+                0, new float[]{5}, 0);
+        g2.setStroke(dashed);
+        g2.setColor(Color.GRAY);
+        g2.drawLine(480, 20, 480, getHeight() - 20);
 
+        // 更多資訊 + QRCode 區域
+        g2.setColor(Color.BLACK);
+        g2.setFont(new Font("SansSerif", Font.BOLD, 18));
+        g2.drawString("更多資訊", 560, 65);
+
+        if (qrImage != null) {
+            g2.drawImage(qrImage, 550, 90, 100, 100, this);
+        } else {
+            g2.drawRect(550, 70, 60, 60);
+            g2.drawString("[QR]", 570, 85);
+        }
     }
 }
