@@ -125,7 +125,7 @@ public class TicketInputFrame extends JFrame {
         setVisible(true);
     }
 
-    /* TODO:資料庫版本
+    // TODO:資料庫版本
     private void handlePreview() {
         try (Connection conn = DBConnection.getConnection()) {
             // 初始化 DAO，確保一致性
@@ -195,8 +195,9 @@ public class TicketInputFrame extends JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "資料庫錯誤：" + e.getMessage(), "錯誤", JOptionPane.ERROR_MESSAGE);
         }
-    }*/
+    }
     // 測試ui版本
+    /*
     private void handlePreview() {
         // 🧪 假資料模式：不連資料庫
         String trainNumber = trainNumberField.getText().trim();
@@ -223,7 +224,7 @@ public class TicketInputFrame extends JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "查無此車次與起訖站搭配（假資料模式）", "錯誤", JOptionPane.ERROR_MESSAGE);
         }
-    }
+    }*/
 
 
     private JButton createStyledButton(String text) {
