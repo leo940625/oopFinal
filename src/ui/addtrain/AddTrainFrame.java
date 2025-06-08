@@ -212,7 +212,7 @@ public class AddTrainFrame extends JFrame {
                         "錯誤", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            int intTrainId = Integer.valueOf(trainId);
+            int intTrainId = Integer.parseInt(trainId);
 
             if (isTrainIdDuplicate(intTrainId, trains)) {
                 JOptionPane.showMessageDialog(this,
@@ -222,7 +222,6 @@ public class AddTrainFrame extends JFrame {
             }
 
             List<StopTime> stops = this.getSelectedStations();
-
             if (stops.size() < 2) {
                 JOptionPane.showMessageDialog(this,
                         "請至少選擇兩個停靠車站！",
@@ -230,9 +229,24 @@ public class AddTrainFrame extends JFrame {
                 return;
             }
 
+            // ➤ 防止相同車站 15 分鐘內出發
+            int newDepStationId = stops.get(0).getStation().getStationId();
+            for (Train existingTrain : trains) {
+                if (existingTrain.getStopTimes().isEmpty()) continue;
+                StopTime firstStop = existingTrain.getStopTimes().get(0);
+                if (firstStop.getStation().getStationId() == newDepStationId) {
+                    LocalTime existingTime = firstStop.getDepartureTime();
+                    if (existingTime != null && Math.abs(existingTime.toSecondOfDay() - departure.toSecondOfDay()) < 15 * 60) {
+                        JOptionPane.showMessageDialog(this,
+                                "已有列車於同站 15 分鐘內出發，請更換時間！",
+                                "錯誤", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
 
             Train train = new Train(intTrainId, stops, isNorthbound);
-            train.calculateSchedule(sectionDAO,stationDAO.getAllStations(),departure);
+            train.calculateSchedule(sectionDAO, stationDAO.getAllStations(), departure);
             trainDAO.addTrain(train);
 
             int choice = JOptionPane.showOptionDialog(this,
@@ -259,7 +273,6 @@ public class AddTrainFrame extends JFrame {
                     "錯誤", JOptionPane.ERROR_MESSAGE);
         }
     }
-
     /**
      * 檢查車次編號是否已存在於數據庫中。
      *

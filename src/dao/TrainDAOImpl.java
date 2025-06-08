@@ -39,23 +39,51 @@ public class TrainDAOImpl implements TrainDAO {
         try (Connection conn = DBConnection.getConnection()) {
             conn.setAutoCommit(false); // 啟用交易控制
 
-            // 插入 Train 資料
+            // === 新增前檢查是否有時間衝突（15分鐘內） ===
+            StopTime newDep = train.getStopTimes().get(0); // 出發站 StopTime
+            LocalTime newDepTime = newDep.getDepartureTime();
+            int newDepStationId = newDep.getStation().getStationId();
+
+            // 透過 getAllTrains() 比對所有現有列車
+            List<Train> existingTrains = getAllTrains();
+            for (Train existing : existingTrains) {
+                List<StopTime> existingStops = existing.getStopTimes();
+                if (existingStops == null || existingStops.isEmpty()) continue;
+
+                StopTime existDep = existingStops.get(0);
+                if (existDep == null || existDep.getDepartureTime() == null) continue;
+
+                int existDepStationId = existDep.getStation().getStationId();
+                LocalTime existDepTime = existDep.getDepartureTime();
+
+                if (existDepStationId == newDepStationId) {
+                    long minuteDiff = Math.abs(java.time.Duration.between(newDepTime, existDepTime).toMinutes());
+                    if (minuteDiff < 15) {
+                        throw new RuntimeException("⚠ 此出發站已有列車於 15 分鐘內出發，請選擇其他時間！");
+                    }
+                }
+            }
+
+            // === 插入 Train 資料表 ===
             String sqlTrain = "INSERT INTO Train (train_number, direction) VALUES (?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(sqlTrain)) {
                 stmt.setInt(1, train.getTrainNumber());
                 stmt.setBoolean(2, train.getDirection());
                 stmt.executeUpdate();
             }
-            // 插入對應的 StopTime 資料
+
+            // === 插入 StopTime 資料表 ===
             StopTimeDAO stopTimeDAO = new StopTimeDAOImpl(conn);
-            List<StopTime> stable = new ArrayList<>();
-            for (StopTime st : train.getStopTimes()) {
-                stable.add(st);
-            }
-            stopTimeDAO.addStopTimes(train.getTrainNumber(), stable);
+            stopTimeDAO.addStopTimes(train.getTrainNumber(), train.getStopTimes());
+
             conn.commit(); // 提交交易
+
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (RuntimeException e) {
+            // 顯示錯誤提示（可選）
+            System.err.println("❌ 新增失敗：" + e.getMessage());
+            throw e; // 若搭配 Swing 可改用 JOptionPane
         }
     }
 
