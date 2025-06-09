@@ -108,23 +108,9 @@
 | Controller  | 接收使用者請求，調用 Model 層處理邏輯，將結果傳給 View 層 |
 | dao  | 負責資料存取，將資料與外部資料源進行交互（例如資料庫） |
 
-## 🚀 執行方式
-
-### ✅ Console 版本
-```bash
-javac -d bin src/**/*.java
-java -cp bin Main
-```
-
-### ✅ JavaFX GUI 版本（若有）
-請先確認已安裝 JavaFX 並設定 VM Options：
-```
---module-path /path/to/javafx-sdk/lib --add-modules javafx.controls,javafx.fxml
-```
-
 ---
 
-## 📌 未來擴充功能（建議）
+## 📌 未來擴充功能
 
 - 模擬月台排程衝突檢查
 - 路線轉乘建議與最短時間演算法（如 Dijkstra）
